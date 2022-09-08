@@ -1,4 +1,7 @@
 -- René Kok
+module Exercise1 where 
+import Test.QuickCheck
+
 -- Exercise 1
 sumSquared :: Integer -> Integer
 sumSquared n = sum [(^2) k | k <- [1..n]]
@@ -13,8 +16,12 @@ sumCubed' :: Integer -> Integer
 sumCubed' n = (^ 2) ((n * (n + 1)) `div` 2)
 
 -- Quicktest
-testTheorem2 :: Integer -> Bool
-testTheorem2 n = sumSquared n == sumSquared' n
+testTheorem2 :: Integer -> Property
+testTheorem2 n = n >= 0 ==> sumSquared n == sumSquared' n
 
-testTheorem3 :: Integer -> Bool
-testTheorem3 n =  sumCubed n == sumCubed' n
+testTheorem3 :: Integer -> Property
+testTheorem3 n = n >= 0 ==> sumCubed n == sumCubed' n
+
+exercise1 :: IO()
+exercise1 = do
+    quickCheck testTheorem3
