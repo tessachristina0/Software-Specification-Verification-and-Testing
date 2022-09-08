@@ -1,6 +1,6 @@
 -- Tim van Ekert
 -- Exercise 4
-module Exercise4 where 
+module Exercise4 where
 import Test.QuickCheck
   ( Arbitrary (arbitrary),
     Gen,
@@ -21,11 +21,25 @@ prime n = n > 1 && all (\ x -> rem n x /= 0) xs
 primes :: [Integer]
 primes = 2 : filter prime [3..]
 
--- Quicktest
+forall :: [a] -> (a -> Bool) -> Bool
+forall = flip all
 
 reversibleStream :: [Integer]
 reversibleStream = filter (prime . reversal) (takeWhile (<10000) primes)
 
--- exercise4 :: IO()
--- exercise4 = do
---   quickCheck reversibleStream
+-- Testable properties
+reversibleStreamIsPrime :: [Integer] -> Bool
+reversibleStreamIsPrime n = forall n prime
+
+reversibleStreamIsLowerThen :: Int -> [Integer] -> Bool
+reversibleStreamIsLowerThen n l = length l < n
+
+reversibleStreamIsReversed :: [Integer] -> Bool
+reversibleStreamIsReversed _  = False -- TODO: Implement function
+
+-- TODO: Remove Test smaller than 10.000 & list is reversed
+exercise4 :: IO()
+exercise4 = do
+  quickCheck $ reversibleStreamIsPrime reversibleStream
+  quickCheck $ reversibleStreamIsLowerThen 10000 reversibleStream
+  quickCheck $ reversibleStreamIsReversed reversibleStream
