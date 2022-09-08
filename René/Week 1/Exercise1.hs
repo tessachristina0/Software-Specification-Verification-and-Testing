@@ -1,6 +1,6 @@
 -- René Kok
 module Exercise1 where 
-import Test.QuickCheck
+import Test.QuickCheck ( (==>), quickCheck, Property )
 
 -- Exercise 1
 sumSquared :: Integer -> Integer
@@ -24,4 +24,5 @@ testTheorem3 n = n >= 0 ==> sumCubed n == sumCubed' n
 
 exercise1 :: IO()
 exercise1 = do
+    quickCheck testTheorem2
     quickCheck testTheorem3
