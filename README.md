@@ -1,1 +1,1 @@
-# SSVT
+# Software Specification, Verification & Testing
