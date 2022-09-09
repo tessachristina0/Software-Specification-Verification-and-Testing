@@ -43,6 +43,7 @@ genMax = (arbitrary :: Gen Int) `suchThat` (<= 9)
 -- {Or are you testing whether perms satisfies a part of its specification? Or are you testing something else still?}
 -- 
 
+-- Implementing QuickCheck to obtain our testreport for our property test.
 exercise3 :: IO ()
 exercise3 = do
   quickCheck $ forAll genMax testTheorem5
