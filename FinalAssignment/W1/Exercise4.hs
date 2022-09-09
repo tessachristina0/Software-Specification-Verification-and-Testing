@@ -50,14 +50,18 @@ reversibleStreamIsLowerThen :: Int -> [Integer] -> Bool
 reversibleStreamIsLowerThen n l = length l < n
 
 -- Property 3: Output list consists of solely reversed numbers
-reversibleStreamIsReversed :: [Integer] -> Bool
-reversibleStreamIsReversed n = forall n == reversal . reversal n
+{- We tried to check the reversal for every item in the list, but there was no time left for us. So we decided to check the reversal in the list for one specific prime.
+If we had more time we would make it recursive, so it would check for every prime in the list -}
+reversibleStreamIsReversed :: Integer -> [Integer] ->Bool
+reversibleStreamIsReversed n x
+         |reversal n `elem` x = True
+         |otherwise = False
 
 -- Implementing QuickCheck to test our solution.
 exercise4 :: IO ()
 exercise4 = do
   quickCheck $ reversibleStreamIsPrime reversibleStream
   quickCheck $ reversibleStreamIsLowerThen 10000 reversibleStream
-  quickCheck $ reversibleStreamIsReversed reversibleStream
+  quickCheck $ reversibleStreamIsReversed 79 reversibleStream
 
 -- {Time spent}: 45 minutes (spread over 2 days)
