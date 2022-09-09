@@ -1,5 +1,5 @@
 -- SSVT Haskell Lab 
--- Week 1 - Group C
+-- Week 1 - Group 5
 -- Exercise 4: Write a function that finds all primes < 10000 with the property that it is prime and its 
 -- reversal is also a prime.
 -- Deliverables: Haskell program, concise test report, indication of time spent.

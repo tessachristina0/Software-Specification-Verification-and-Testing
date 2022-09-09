@@ -1,5 +1,5 @@
 -- SSVT Haskell Lab 
--- Week 1 - Group C
+-- Week 1 - Group 5
 -- Exercise 7: 
 -- Deliverables: Haskell program, test of correctness, indication of time spent.
 
@@ -7,22 +7,22 @@
 forall :: [a] -> (a -> Bool) -> Bool
 forall = flip all
 
--- TODO:
+-- Function to add Integers to the digit array.
 toDigitArray :: Integer -> [Integer]
 toDigitArray 0 = []
 toDigitArray x = toDigitArray (x `div` 10) ++ [x `mod` 10]
 
--- TODO: 
+-- Function to change the digit array to an Integer.
 digitArrayToInteger :: [Integer] -> Integer
 digitArrayToInteger = read . concatMap show
 
--- TODO: 
+-- Function to add up the two digits of a number if it is higher then 9 otherwise the number stays the same.
 addDigitsOfProduct :: Integer -> Integer
 addDigitsOfProduct n
   | n > 9 = sum $ toDigitArray n
   | otherwise = n
 
--- TODO: 
+-- Function to double every second digit in the list.
 doubleEverySecondDigit :: [Integer] -> [Integer]
 doubleEverySecondDigit [] = []
 doubleEverySecondDigit l = [if even i then addDigitsOfProduct (v * 2) else v | (i, v) <- zip [1 ..] l]

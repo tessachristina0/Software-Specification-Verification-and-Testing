@@ -1,5 +1,5 @@
 -- SSVT Haskell Lab 
--- Week 1 - Group C
+-- Week 1 - Group 5
 -- Exercise 5: Find the smallest prime number that is a sum of 101 consecutive primes.
 -- Deliverables: Haskell program, solution, answer to the questions, indication of time spent.
 

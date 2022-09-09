@@ -1,5 +1,5 @@
 -- SSVT Haskell Lab 
--- Week 1 - Group C
+-- Week 1 - Group 5
 -- Exercise 6: Write a Haskell function using counterexamples that can be used to refute the following conjecture: 
 -- "If [p1..pn] is a list of consecutive primes starting from 2, then (p1*..*pn)+1 is also prime."
 -- Deliverables: Haskell program, indication of time spent.

@@ -1,5 +1,5 @@
 -- SSVT Haskell Lab 
--- Week 1 - Group C
+-- Week 1 - Group 5
 -- Exercise 2: Test the property that a finite set A with lenght n has powerset P(A) = 2^n for integer lists of 
 -- the form [1..n].
 -- Deliverables: Haskell program, concise test report, answers to the questions, indication of time spent.
@@ -15,7 +15,7 @@ import Test.QuickCheck
     (==>),
   )
 
--- Our solution: Testing of the comparison of the lenght of an integer list to the powerset.
+-- Our solution: Testing of the comparison of the length of an integer list to the powerset.
 subsequencesLength :: Int -> Int
 subsequencesLength n = length $ subsequences [1 .. n]
 
