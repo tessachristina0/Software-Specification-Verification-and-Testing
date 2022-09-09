@@ -27,7 +27,7 @@ primes = 2 : filter prime [3 ..]
 
 -- Function for selecting the first 101 elements of a list.
 take101 :: [Integer] -> [Integer]
-take101 xs = takeWhile (<= 101) xs
+take101 = takeWhile (<= 101)
 
 -- Function for checking if the selected primes sum up to a prime.
 sumPrimes :: [Integer] -> Integer
