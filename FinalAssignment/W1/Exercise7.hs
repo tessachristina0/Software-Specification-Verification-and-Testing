@@ -1,6 +1,6 @@
--- SSVT Haskell Lab 
+-- SSVT Haskell Lab
 -- Week 1 - Group 5
--- Exercise 7: 
+-- Exercise 7:
 -- Deliverables: Haskell program, test of correctness, indication of time spent.
 
 -- Provided function for checking validity (truthness) of all elements of list.

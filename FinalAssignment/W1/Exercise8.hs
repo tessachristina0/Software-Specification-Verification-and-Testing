@@ -1,4 +1,4 @@
--- SSVT Haskell Lab 
+-- SSVT Haskell Lab
 -- Week 1 - Group 5
 -- Exercise 8: Solve a crime by one guilty boy in a school of boys, of which 3 are honest.
 -- Deliverables: Haskell program, indication of time spent.
@@ -45,7 +45,7 @@ honest = concat [accusers g | g <- guilty]
 -- The singleton list with guilty boys is printed as well as the list with three honest boys.
 main :: IO ()
 main = do
-    putStrLn $ "Guilty: " ++ show guilty
-    putStrLn $ "Honest: " ++ show honest
+  putStrLn $ "Guilty: " ++ show guilty
+  putStrLn $ "Honest: " ++ show honest
 
 -- {Time spent}: 70 minutes
