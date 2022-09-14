@@ -11,7 +11,7 @@ probs n = do
   return (p:ps)
 
 calculateQuartileNumber :: [Float] -> (Int, Int, Int, Int) -> (Int, Int, Int, Int)
-calculateQuartileNumber [] a = a
+calculateQuartileNumber [_] a = a
 calculateQuartileNumber (x:xs) (a,b,c,d) | x <= 0.25 = calculateQuartileNumber xs (a+1,b,c,d)
                                          | x <= 0.50 = calculateQuartileNumber xs (a,b+1,c,d)
                                          | x <= 0.75 = calculateQuartileNumber xs (a,b,c+1,d)
