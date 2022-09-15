@@ -1,12 +1,13 @@
 import Data.Char (isDigit, ord)
-import Data.List (find)
+import Data.List (find, permutations)
+import GHC.Char
 
 type CountryCode = String
 
 type AmountOfChars = Int
 
-validIbans :: [(AmountOfChars, CountryCode)]
-validIbans =
+countryCodesAndLength :: [(AmountOfChars, CountryCode)]
+countryCodesAndLength =
   [ (28, "AL"),
     (24, "AD"),
     (20, "AT"),
@@ -99,7 +100,7 @@ correctLength str tuple = case tuple of
 findMatchingCountry :: String -> Maybe (AmountOfChars, CountryCode)
 findMatchingCountry [] = Nothing
 findMatchingCountry [_] = Nothing
-findMatchingCountry (x : y : xs) = find (\(n, ib) -> [x, y] == ib) validIbans
+findMatchingCountry (x : y : xs) = find (\(n, ib) -> [x, y] == ib) countryCodesAndLength
 
 replaceLetters :: [Char] -> [Char]
 replaceLetters [] = []
@@ -120,3 +121,27 @@ convertToInteger s = read s :: Integer
 
 computeRemainder :: Integer -> Integer
 computeRemainder n = n `mod` 97
+
+validIbans :: [String]
+validIbans = [
+  "NL97MBOC0171430387",
+  "RO27TVJL9210107481808034",
+  "BE07374005691245",
+  "BY34784757245091214738668214",
+  "LI7048238535695690948",
+  "TN8892247063851251541453",
+  "XK393669816134851383",
+  "GT05580733522436392197717097",
+  "CY97675480596068137243111133"
+  ]
+
+forall :: [a] -> (a -> Bool) -> Bool
+forall = flip all
+
+invalidateIban :: String -> String
+invalidateIban (a : b : xs) = [a, b] ++ head (permutations xs)
+
+exercise7 :: IO ()
+exercise7 = do
+  print $ forall validIbans iban
+  print $ not $ forall validIbans iban
