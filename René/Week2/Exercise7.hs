@@ -109,10 +109,10 @@ replaceLetters (x : xs)
 
 rearrange :: [Char] -> [Char]
 rearrange [] = []
-rearrange [_] = []
-rearrange [_, _] = []
-rearrange [_, _, _] = []
-rearrange [_, _, _, _] = []
+rearrange [a] = [a]
+rearrange [a, b] = [a, b]
+rearrange [a, b, c] = [a, b, c]
+rearrange [a, b, c, d] = [a, b, c, d]
 rearrange (a : b : c : d : xs) = xs ++ [a, b, c, d]
 
 convertToInteger :: String -> Integer

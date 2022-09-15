@@ -1,3 +1,6 @@
+import Test.QuickCheck (Positive)
+import Test.QuickCheck.Modifiers ( Positive(Positive) )
+import System.Random.Stateful
 data Shape
   = NoTriangle
   | Equilateral
@@ -20,7 +23,7 @@ isEquilateral a b c = a == b && a == c
 
 isIsosceles :: Integer -> Integer -> Integer -> Bool
 isIsosceles a b c = a == b || a == c || b == c
- 
+
 triangle :: Integer -> Integer -> Integer -> Shape
 triangle a b c
   | not $ isValidTriangle a b c = NoTriangle
@@ -28,6 +31,11 @@ triangle a b c
   | isRectangular a b c = Rectangular
   | isIsosceles a b c = Isosceles
   | otherwise = Other
+
+prop_invalidTriangles :: Num c => Positive c -> Positive c -> (c, c, c)
+prop_invalidTriangles (Positive a) (Positive b) | r <= 0.33 =  (a, b, a * b)
+                                                | r <= 0.66 = (a, a * b, b)
+                                                | otherwise = (a * b, a, b)
 
 exercise2 :: IO()
 exercise2 = putStrLn "HOI" -- TODO: How to test this?
