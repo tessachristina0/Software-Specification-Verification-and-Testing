@@ -1,6 +1,5 @@
 import Data.Char (isDigit, ord)
 import Data.List (find)
-import System.FilePath (replaceExtension)
 
 type CountryCode = String
 
