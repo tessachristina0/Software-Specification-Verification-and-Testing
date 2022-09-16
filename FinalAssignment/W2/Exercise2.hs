@@ -76,7 +76,8 @@ prop_isOther (Positive a) (Positive b) (Positive c) =
 
 main :: IO ()
 main = do
-  putStrLn "Time spent +/- 45 minutes"
+  putStrLn "\bExercise 7\nTime spent +/- 45 minutes\n"
+  
   putStrLn
     "To check the correctness of the program we implemented different tests \
     \based on the different properties of the different triangles\n"
