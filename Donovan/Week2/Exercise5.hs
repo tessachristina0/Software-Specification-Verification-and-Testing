@@ -3,7 +3,11 @@
 -- Exercise 5
 module Exercise5 where
 
-import Data.List (delete, permutations, sortBy)
+import Data.List (permutations)
+import Test.QuickCheck (Property, quickCheck, (==>))
+
+(-->) :: Bool -> Bool -> Bool
+p --> q = p || q
 
 isDerangement :: Eq a => [a] -> [a] -> Bool
 isDerangement [] [] = True
@@ -20,3 +24,10 @@ isDerangement normalList derangedList =
 
 deran :: Int -> [[Int]]
 deran n = filter (\x -> isDerangement x [0..n-1]) (permutations [0..n-1])
+
+testPropertyLength :: [Int] -> [Int] -> Bool
+testPropertyLength normalList derangedList = isDerangement normalList derangedList --> (length normalList == length derangedList)
+
+exercise5 :: IO ()
+exercise5 = do
+  quickCheck testPropertyLength
