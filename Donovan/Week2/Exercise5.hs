@@ -10,8 +10,7 @@ import Test.QuickCheck (Property, quickCheck, (==>))
 p --> q = not p || q
 
 {-
-This was a very hard assignment since we were contemplating multiple ways of implementing derangement. We were first looking for ways to recursively compare lists to one another until a correct derangement was found.
-However this approach became complicated very quickly. This function takes two lists and compares if all the values are elements of each list if the indexes of the values are equal to one another. In a derangement
+This function takes two lists and compares if all the values are elements of each list if the indexes of the values are equal to one another. In a derangement
 it is not allowed that a values keeps the same index.
 -}
 isDerangement :: Eq a => [a] -> [a] -> Bool
@@ -42,6 +41,11 @@ testPropertyDerangementCorrectIntegerList = isDerangement
 -- This test tests the property validity of the derangement. In the exercise5 method, the incorrect integer list combination is given for comparison, the method should return False if the parameters implemented correctly.
 testPropertyDerangementIncorrectIntegerList :: [Int] -> [Int] -> Bool
 testPropertyDerangementIncorrectIntegerList = isDerangement
+
+{-
+We have tried to automate the test process with quickCheck, but the issue is that quickCheck inputs random amount of numbers and lists. We are currently not aware of ways to force/guide quickCheck to use normal and deranged lists as input only. 
+Given more time, we would have tried to define clear datatypes for the inputs and made a specification for the function that only accepted those normallist and derangedlist datatypes.
+-} 
 
 exercise5 :: IO ()
 exercise5 = do
