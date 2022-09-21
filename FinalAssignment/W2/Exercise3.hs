@@ -1,4 +1,3 @@
--- Donovan Schaafsma
 -- Exercise 3
 module Exercise3 where
 

@@ -1,4 +1,3 @@
--- Donovan Schaafsma
 -- Week 2 - Group 5
 -- Exercise 5
 module Exercise5 where

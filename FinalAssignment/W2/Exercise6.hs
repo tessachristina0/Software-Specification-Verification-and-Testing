@@ -1,4 +1,3 @@
--- Tim van Ekert
 -- Exercise 6
 module Exercise6 where
 import Data.Maybe (fromMaybe)
