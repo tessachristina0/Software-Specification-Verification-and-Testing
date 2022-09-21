@@ -1,4 +1,3 @@
--- Tim van Ekert
 -- Exercise 1
 module Exercise1 where
 import System.Random ( Random(random), getStdRandom )
