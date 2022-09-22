@@ -10,14 +10,29 @@ import FinalAssignment.W3.Exercise3
 type Clause  = [Int]
 type Clauses = [Clause]
 
--- p -> q === !p v q
-
-formExample = Equiv (Cnj [p, q]) (Impl (Neg q) (Neg p))
-
 cnf2cls :: Form -> Clauses
 cnf2cls = undefined
+
+propToInt :: Form -> Int
+propToInt (Prop f) = f
+propToInt (Neg (Prop f)) = -f
+
+-- Mappen over xs
+-- En dan alle properties uit de disjunction halen
+-- Converteren naar int
+
+formToClauses :: Form -> Clauses
+formToClauses (Cnj xs) = map formToClause xs
+formToClauses xs = formToClauses (Cnj [xs])
+
+formToClause :: Form -> Clause
+formToClause (Dsj xs) = map propToInt xs
+formToClause xs = formToClause (Dsj [xs])
+
+form = "*(1+(2*(3 4)))"
 
 exercise6 :: IO ()
 exercise6 = do
   putStrLn "\bExercise 6\nTime spent +/- ~ minutes\n"
-  print $ cnf formExample
+  
+  print $ parse form
