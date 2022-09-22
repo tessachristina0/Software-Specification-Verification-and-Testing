@@ -1,8 +1,8 @@
 -- Exercise 3
-module FinalAssignment.WK3.Exercise3 where
+module FinalAssignment.W3.Exercise3 where
 
 import Data.List (nub, sort)
-import FinalAssignment.WK3.Lecture3 (Form (Cnj, Dsj), arrowfree, form1, form2, form3, nnf)
+import FinalAssignment.W3.Lecture3 (Form (Cnj, Dsj), arrowfree, form1, form2, form3, nnf)
 import System.Random ()
 import Test.QuickCheck ()
 
