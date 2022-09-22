@@ -27,22 +27,26 @@ equiv :: Form -> Form -> Bool
 equiv f1 f2 = all (`evl` Equiv f1 f2) (allVals (Equiv f1 f2))
 
 
--- Tests to check the
+-- Tests:
+-- Test of the contradiction, showed in a tuple per formula
 testContradiction :: ((String, Bool), (String, Bool), (String, Bool))
 testContradiction = (("form 1", contradiction (Neg form1)), ("form 2", contradiction (Neg form2)), ("form 3", contradiction (Neg form3)))
 
+-- Test of the tautology, showed in a tuple per formula
 testTautology :: ((String, Bool), (String, Bool), (String, Bool))
 testTautology = (("form 1", tautology form1 ), ("form 2", tautology form2), ("form 3", tautology form3))
 
+-- Test of the entailment, showed in a tuple per formula
 testEntails :: ((String, Bool), (String, Bool), (String, Bool))
 testEntails = (("form 1, form 2", entails form1 form2 ), ("form 1, form 3", entails form1 form3), ("form 2, form", entails form2 form3))
 
+-- Test of the equivalence, showed in a tuple per formula
 testEquiv :: ((String, Bool), (String, Bool), (String, Bool))
 testEquiv = (("form 1, form 2", equiv form1 form2 ), ("form 1, form 3", equiv form1 form3), ("form 2, form", equiv form2 form3))
 
 exercise1 :: IO ()
 exercise1 = do
-  putStrLn "\bExercise 1\nTime spent +/- 40 minutes\n"
+  putStrLn "\bExercise 1\nTime spent +/- 50 minutes\n"
   putStrLn "Contradiction: "
   print testContradiction
   putStrLn "\nTautology: "
