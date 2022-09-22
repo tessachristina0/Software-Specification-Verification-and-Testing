@@ -20,28 +20,28 @@ clause (Cnj [xs, ys]) y = Cnj [clause xs y, clause ys y]
 clause y (Cnj [xs, ys]) = Cnj [clause y xs, clause y ys]
 clause x y = Dsj [x, y]
 
-flat :: Form -> Form
-flat (Cnj fs) = Cnj (flatC fs)
-flat (Dsj fs) = Dsj (flatD fs)
-flat f = f
+removeRedundantBrackets :: Form -> Form
+removeRedundantBrackets (Cnj fs) = Cnj (removeRedundantBracketsCnj fs)
+removeRedundantBrackets (Dsj fs) = Dsj (removeRedundantBracketsDnj fs)
+removeRedundantBrackets f = f
 
-flatC :: [Form] -> [Form]
-flatC [] = []
-flatC (Cnj fs:gs) = flatC (fs++gs)
-flatC (f:fs) = flat f : flatC fs
+removeRedundantBracketsCnj :: [Form] -> [Form]
+removeRedundantBracketsCnj [] = []
+removeRedundantBracketsCnj (Cnj fs:gs) = removeRedundantBracketsCnj (fs++gs)
+removeRedundantBracketsCnj (f:fs) = removeRedundantBrackets f : removeRedundantBracketsCnj fs
 
-flatD :: [Form] -> [Form]
-flatD [] = []
-flatD (Dsj fs:gs) = flatD (fs++gs)
-flatD (f:fs) = f : flatD fs   
+removeRedundantBracketsDnj :: [Form] -> [Form]
+removeRedundantBracketsDnj [] = []
+removeRedundantBracketsDnj (Dsj fs:gs) = removeRedundantBracketsDnj (fs++gs)
+removeRedundantBracketsDnj (f:fs) = removeRedundantBrackets f : removeRedundantBracketsDnj fs
 
 -- Convert propositional forms to CNF
 cnf :: Form -> Form
-cnf = flat . cnf' . nnf . arrowfree
+cnf = removeRedundantBrackets . cnf' . nnf . arrowfree
 
 exercise3 :: IO ()
 exercise3 = do
-  putStrLn "\bExercise 3\nTime spent +/- 50 minutes\n"
+  putStrLn "\bExercise 3\nTime spent +/- 2 hours\n"
   putStrLn "Form 1:"
   print $ cnf form1
   putStrLn "Form 2:"
