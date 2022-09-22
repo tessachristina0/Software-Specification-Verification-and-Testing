@@ -5,7 +5,7 @@
 import Data.List
 import System.Random
 import Test.QuickCheck
-import Lecture3
+import FinalAssignment.W3.Lecture3
 
 -- Example from the slides
 satisfiable :: Form -> Bool
