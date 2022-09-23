@@ -66,6 +66,8 @@ testAmountOfClauses f = countClauses (cnf f) == length (cls f)
 
   These tests do not validate the correctness of the function which converts a cnf to a cls. We have tried to implement this but ran out of time. These tests are
   necessary to complete the tests of this implementation. We think this can be done by creating a transformer back to cnf and the compare the equivalence.
+
+  The automated testing is partially implemented, but the generator isn't working perfectly that's why there are some failed tests sometimes.
 -}
 
 exercise6 :: IO ()
