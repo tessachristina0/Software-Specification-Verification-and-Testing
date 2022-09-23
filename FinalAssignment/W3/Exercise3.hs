@@ -3,12 +3,22 @@
 -- Exercise 3: Convert clauses to a cnf.
 -- Deliverables: conversion program with documentation, indication of time spent.
 -- Time spend: 2 hours --
-module FinalAssignment.W3.Exercise3 where
+module Exercise3 where
 
 import Data.List (nub, sort)
 import System.Random ()
 import Test.QuickCheck ()
-import FinalAssignment.W3.Lecture3
+import Lecture3
+
+{- For this exercise we made multiple functions. We applied provided functions of
+arrowfree for removing implications and equivalences, and NNF for removing double 
+negations.
+Then, cnf' created an opportunity to look for any Disjunctions and, if found, go into
+these disjunctions with function clause which applied DeMorgans law recursively inside
+any disjunctions. 
+Afterwards, we removed redundant brackets, meaning disjunctions within disjunctions and
+conjunctions within conjunctions.
+-}
 
 -- Convert to conjunctions of clauses with disjunctions inside:
 cnf' :: Form -> Form

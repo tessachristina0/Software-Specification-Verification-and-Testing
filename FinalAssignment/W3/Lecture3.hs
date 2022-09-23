@@ -1,4 +1,4 @@
-module FinalAssignment.W3.Lecture3
+module Lecture3
 
 
 where 
