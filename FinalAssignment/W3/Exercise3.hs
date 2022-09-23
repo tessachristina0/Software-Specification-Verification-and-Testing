@@ -3,12 +3,12 @@
 -- Exercise 3: Convert clauses to a cnf.
 -- Deliverables: conversion program with documentation, indication of time spent.
 -- Time spend: 2 hours --
-module Exercise3 where
+module FinalAssignment.W3.Exercise3 where
 
 import Data.List (nub, sort)
 import System.Random ()
 import Test.QuickCheck ()
-import Lecture3
+import FinalAssignment.W3.Lecture3
 
 {- For this exercise we made multiple functions. We applied provided functions of
 arrowfree for removing implications and equivalences, and NNF for removing double 

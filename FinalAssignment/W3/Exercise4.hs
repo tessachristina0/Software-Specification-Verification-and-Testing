@@ -3,13 +3,14 @@
 -- Exercise 3: Generate formulas
 -- Deliverables: generator for formulas, sequence of test properties, test report, indication of time spent.
 -- Time spend: 10 hours --
-module Exercise4 where
+{-# LANGUAGE InstanceSigs #-}
+module FinalAssignment.W3.Exercise4 where
 import Data.List ()
 import System.Random ()
 import Test.QuickCheck
 import Test.QuickCheck.Gen
-import Exercise3
-import Lecture3
+import FinalAssignment.W3.Exercise3
+import FinalAssignment.W3.Lecture3
 import Control.Monad.IO.Class
 
 
