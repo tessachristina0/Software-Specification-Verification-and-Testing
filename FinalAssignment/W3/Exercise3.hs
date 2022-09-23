@@ -6,9 +6,10 @@
 module FinalAssignment.W3.Exercise3 where
 
 import Data.List (nub, sort)
-import FinalAssignment.W3.Lecture3 (Form (Cnj, Dsj), arrowfree, form1, form2, form3, nnf)
+import Lecture3
 import System.Random ()
 import Test.QuickCheck ()
+import Lecture3 (Form)
 
 -- Convert to conjunctions of clauses with disjunctions inside:
 cnf' :: Form -> Form
@@ -41,6 +42,7 @@ removeRedundantBracketsDnj :: [Form] -> [Form]
 removeRedundantBracketsDnj [] = []
 removeRedundantBracketsDnj (Dsj fs:gs) = removeRedundantBracketsDnj (fs++gs)
 removeRedundantBracketsDnj (f:fs) = removeRedundantBrackets f : removeRedundantBracketsDnj fs
+
 
 -- Convert propositional forms to CNF
 cnf :: Form -> Form

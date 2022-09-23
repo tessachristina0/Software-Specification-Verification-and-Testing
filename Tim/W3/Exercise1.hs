@@ -4,7 +4,7 @@ module Exercise1 where
 import Data.List
 import System.Random
 import Test.QuickCheck
-import Tim.W3.Lecture3
+import Lecture3
 
 -- Example from the slides
 satisfiable :: Form -> Bool
@@ -12,7 +12,7 @@ satisfiable f = any (`evl` f) (allVals f)
 
 -- Contradiction
 contradiction :: Form -> Bool
-contradiction f = not (any (`evl` f) (allVals f))
+contradiction f = not (any (\x -> x `evl` f) (allVals f))
 
 -- A formula f is a tautology if it is satisfied by all valuations. - From the slides
 tautology :: Form -> Bool

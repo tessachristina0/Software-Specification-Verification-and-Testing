@@ -58,8 +58,52 @@ genForm = [
        f2 <- genForm
        return (Cnj [f1 f2]),
     do  
-
-
 ]
+
+
+
+-- genForm :: Int -> Gen Form
+-- genForm n = if n > 0 then frequency [
+--     (3, do Prop <$> genName),
+--     (3, do Neg <$> genForm (n - 1)),
+--     (1, do f1 <- genForm (n - 1)
+--            f2 <- genForm (n - 1)
+--            return (Cnj [f1, f2])),
+--     (1, do f3 <- genForm (n - 1)
+--            f4 <- genForm (n - 1)
+--            return (Dsj [f3, f4])),
+--     (1, do f5 <- genForm (n - 1)
+--            Impl f5 <$> genForm (n - 1)),
+--     (1, do f7 <- genForm (n - 1)
+--            Equiv f7 <$> genForm (n - 1))
+--     ] else oneof [
+--        Prop <$> genName
+--     ]
+
+-- Latest Exercise4:
+instance Arbitrary Form where
+       arbitrary = sized genForm
+
+genForm :: Int -> Gen Form
+genForm n = 
+       if n > 0 then frequency [
+              (3, do Prop <$> genName),
+              (3, do Neg <$> genForm (n - 1)),
+              (1, do f1 <- genForm (n - 1)
+                     f2 <- genForm (n - 1)
+                     return (Cnj [f1, f2])),
+              (1, do f3 <- genForm (n - 1)
+                     f4 <- genForm (n - 1)
+                     return (Dsj [f3, f4])),
+              (1, do f5 <- genForm (n - 1)
+                     Impl f5 <$> genForm (n - 1)),
+              (1, do f7 <- genForm (n - 1)
+                     Equiv f7 <$> genForm (n - 1))
+              ] else oneof [
+                     Prop <$> genName
+                     ]
+
+
+
 -- Use your random testing method to test the correctness of the conversion program from Exercise4
 -- Formulate a number of relevant properties to test:

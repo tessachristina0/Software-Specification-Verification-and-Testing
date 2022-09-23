@@ -111,6 +111,3 @@ exercise4 = do
   quickCheck propId
   quickCheck propReversed
   print ("This is the sorted list with the strongest one first: ", sortBy sortPropList ["propReversed", "propId"])
-
-
-

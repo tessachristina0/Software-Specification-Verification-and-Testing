@@ -1,9 +1,9 @@
-module Tim.W3.Lecture3
+module Lecture3
 
 where 
 
 import Data.List
-import Data.Char
+import Data.Char ( isDigit, isSpace )
 import Test.QuickCheck
 
 infix 1 --> 
