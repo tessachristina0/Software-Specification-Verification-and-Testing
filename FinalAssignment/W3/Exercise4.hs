@@ -52,7 +52,7 @@ genName = do arbitrary `suchThat` (<=10)
 
 -- Generator to create an arbitrary propositional formula
 instance Arbitrary Form where
-    arbitrary :: Gen Form
+--     arbitrary :: Gen Form
     arbitrary = Prop <$> choose (1,5)
 
 genForm :: Gen Form
