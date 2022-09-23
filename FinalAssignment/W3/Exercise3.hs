@@ -6,10 +6,9 @@
 module FinalAssignment.W3.Exercise3 where
 
 import Data.List (nub, sort)
-import Lecture3
 import System.Random ()
 import Test.QuickCheck ()
-import Lecture3 (Form)
+import FinalAssignment.W3.Lecture3
 
 -- Convert to conjunctions of clauses with disjunctions inside:
 cnf' :: Form -> Form

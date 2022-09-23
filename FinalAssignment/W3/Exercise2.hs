@@ -44,7 +44,7 @@ exercise2 = do
     putStrLn "\bExercise 3\nTime spent +/- 30 minutes\n"
     putStrLn ("The output of the parse function should be a list: " ++ show (prop_outputIsAList "*((-22==>-21) 3)"))
     putStrLn ("An empty string should return a empty list: " ++ show prop_emptyParse)
-    putStrLn ("The given input should return the given output" ++ show (forall forms prop_parseRight))
+    putStrLn ("The given input should return the given output:" ++ show (forall forms prop_parseRight))
     -- TODO: Gebruik deze in combinatie met de generator van Tessa als die af is
     -- quickCheck $ forAll (genForm 10) prop_parseRight'
 

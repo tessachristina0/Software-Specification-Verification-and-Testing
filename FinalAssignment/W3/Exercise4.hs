@@ -1,10 +1,16 @@
+-- SSVT Haskell Lab
+-- Week 3 - Group 5
+-- Exercise 3: Generate formulas
+-- Deliverables: generator for formulas, sequence of test properties, test report, indication of time spent.
+-- Time spend: 10 hours --
+{-# LANGUAGE InstanceSigs #-}
 module FinalAssignment.W3.Exercise4 where
 import Data.List ()
 import System.Random ()
 import Test.QuickCheck
 import Test.QuickCheck.Gen
-import Exercise3
-import Lecture3
+import FinalAssignment.W3.Exercise3
+import FinalAssignment.W3.Lecture3
 import Control.Monad.IO.Class
 
 
@@ -24,24 +30,28 @@ import Control.Monad.IO.Class
 genName :: Gen Int
 genName = do arbitrary `suchThat` (<=10)
 
-
 instance Arbitrary Form where
-       arbitrary = sized genForm where
-              genForm :: Int -> Gen Form
-              genForm n = 
-                     if n > 0 then frequency [
+    arbitrary :: Gen Form
+    arbitrary = Prop <$> choose (1,5)
+
+genForm :: Gen Form
+genForm = sized genForm'
+
+genForm' :: Int -> Gen Form
+genForm' 0 = arbitrary
+genForm' n = if n > 0 then frequency [
                             (3, do Prop <$> genName),
-                            (3, do Neg <$> genForm (n - 1)),
-                            (1, do f1 <- genForm (n - 1)
-                                   f2 <- genForm (n - 1)
+                            (3, do Neg <$> genForm' (n - 1)),
+                            (1, do f1 <- genForm' (n - 1)
+                                   f2 <- genForm' (n - 1)
                                    return (Cnj [f1, f2])),
-                            (1, do f3 <- genForm (n - 1)
-                                   f4 <- genForm (n - 1)
+                            (1, do f3 <- genForm' (n - 1)
+                                   f4 <- genForm' (n - 1)
                                    return (Dsj [f3, f4])),
-                            (1, do f5 <- genForm (n - 1)
-                                   Impl f5 <$> genForm (n - 1)),
-                            (1, do f7 <- genForm (n - 1)
-                                   Equiv f7 <$> genForm (n - 1))
+                            (1, do f5 <- genForm' (n - 1)
+                                   Impl f5 <$> genForm' (n - 1)),
+                            (1, do f7 <- genForm' (n - 1)
+                                   Equiv f7 <$> genForm' (n - 1))
                             ] else oneof [
                                    Prop <$> genName
                                    ]
@@ -112,4 +122,5 @@ propNoNest (Equiv x y) = propNoNest x && propNoNest y
 -- Implementing QuickCheck to test our theorem.
 exercise4 :: IO ()
 exercise4 = do
-  quickCheck (forAll propNoNest cnf genProp)
+       putStrLn "\bExercise 3\nTime spent +/- 10 hours\n"
+       -- quickCheck (forAll propNoNest cnf genProp)
