@@ -70,4 +70,23 @@ testAmountOfClauses f = countClauses (cnf f) == length (cls f)
 exercise6 :: IO ()
 exercise6 = do
   putStrLn "\bExercise 6\nTime spent +/- 6 minutes\n"
+  
+  putStrLn "\nprop_sameProperties form 1:"
+  print $ prop_sameProperties form1
+  
+  putStrLn "\nprop_sameProperties form 2:"
+  print $ prop_sameProperties form2
+  
+  putStrLn "\nprop_sameProperties form 3:"
+  print $ prop_sameProperties form3
+
+  putStrLn "\ntestAmountOfClauses form 1:"
+  print $ testAmountOfClauses form1
+  
+  putStrLn "\ntestAmountOfClauses form 2:"
+  print $ testAmountOfClauses form2
+  
+  putStrLn "\ntestAmountOfClauses form 3:"
+  print $ testAmountOfClauses form3
+
   verboseCheck $ forAll (genForm 5) prop_sameProperties
