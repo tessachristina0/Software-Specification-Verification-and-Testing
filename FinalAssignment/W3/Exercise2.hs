@@ -1,4 +1,8 @@
--- Time spent: 30 minutes -- 
+-- SSVT Haskell Lab
+-- Week 3 - Group 5
+-- Exercise 2: Test the parse function
+-- Deliverables: test report describing the test method used and the outcome of the test, indication of time spent.
+-- Time spend: 30 minutes --
 module FinalAssignment.W3.Exercise2 where
 
 import FinalAssignment.W3.Lecture3
@@ -37,6 +41,7 @@ forms =
 
 exercise2 :: IO ()
 exercise2 = do
+    putStrLn "\bExercise 3\nTime spent +/- 30 minutes\n"
     putStrLn ("The output of the parse function should be a list: " ++ show (prop_outputIsAList "*((-22==>-21) 3)"))
     putStrLn ("An empty string should return a empty list: " ++ show prop_emptyParse)
     putStrLn ("The given input should return the given output" ++ show (forall forms prop_parseRight))

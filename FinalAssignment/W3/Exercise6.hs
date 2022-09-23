@@ -2,6 +2,7 @@
 -- Week 3 - Group 5
 -- Exercise 6: Transform the CNF to a CLS and write tests for it using automated testing.
 -- Deliverables: Conversion program, test generator, test properties, documentation of the automated testing process. Also, give an indication of time spent.
+-- Time spend: 60 minutes --
 module FinalAssignment.W3.Exercise6 where
 
 import Data.List (nub, sort, (\\))
@@ -69,7 +70,7 @@ testAmountOfClauses f = countClauses (cnf f) == length (cls f)
 
 exercise6 :: IO ()
 exercise6 = do
-  putStrLn "\bExercise 6\nTime spent +/- 6 minutes\n"
+  putStrLn "\bExercise 6\nTime spent +/- 60 minutes\n"
   
   putStrLn "\nprop_sameProperties form 1:"
   print $ prop_sameProperties form1

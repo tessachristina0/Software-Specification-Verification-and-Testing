@@ -1,4 +1,8 @@
--- Exercise 3
+-- SSVT Haskell Lab
+-- Week 3 - Group 5
+-- Exercise 3: Convert clauses to a cnf.
+-- Deliverables: conversion program with documentation, indication of time spent.
+-- Time spend: 2 hours --
 module FinalAssignment.W3.Exercise3 where
 
 import Data.List (nub, sort)

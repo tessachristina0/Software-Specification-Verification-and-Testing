@@ -2,6 +2,7 @@
 -- Week 3 - Group 5
 -- Exercise 1: Give the definitions of a contradiction, tautology, entailment and equivalence.
 -- Deliverables: implementation, description of your method of checking the definitions, indication of time spent.
+-- Time spend: 50 minutes --
 import Data.List
 import System.Random
 import Test.QuickCheck
