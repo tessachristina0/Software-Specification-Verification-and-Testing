@@ -20,16 +20,19 @@ clause (Cnj [xs, ys]) y = Cnj [clause xs y, clause ys y]
 clause y (Cnj [xs, ys]) = Cnj [clause y xs, clause y ys]
 clause x y = Dsj [x, y]
 
+-- Function to remove the redundant brackets of the Cnj and Dnj
 removeRedundantBrackets :: Form -> Form
 removeRedundantBrackets (Cnj fs) = Cnj (removeRedundantBracketsCnj fs)
 removeRedundantBrackets (Dsj fs) = Dsj (removeRedundantBracketsDnj fs)
 removeRedundantBrackets f = f
 
+-- Function to remove the redundant brackets of the Cnj
 removeRedundantBracketsCnj :: [Form] -> [Form]
 removeRedundantBracketsCnj [] = []
 removeRedundantBracketsCnj (Cnj fs:gs) = removeRedundantBracketsCnj (fs++gs)
 removeRedundantBracketsCnj (f:fs) = removeRedundantBrackets f : removeRedundantBracketsCnj fs
 
+-- Function to remove the redundant brackets of the Dnj
 removeRedundantBracketsDnj :: [Form] -> [Form]
 removeRedundantBracketsDnj [] = []
 removeRedundantBracketsDnj (Dsj fs:gs) = removeRedundantBracketsDnj (fs++gs)
