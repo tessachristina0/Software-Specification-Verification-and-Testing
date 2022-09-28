@@ -1,0 +1,105 @@
+def config
+  {
+    :bug_bento => false,
+  }
+end
+
+external 'door'
+process('main') {
+  timeout 0.5
+  channel('door') {
+    stimulus 'open'
+    stimulus 'close'
+    stimulus 'lock', { 'passcode' => :integer }
+    stimulus 'unlock', { 'passcode' => :integer }
+
+    response 'opened'
+    response 'closed'
+    response 'locked'
+    response 'unlocked'
+    response 'invalid_command'
+    response 'invalid_passcode'
+    response 'incorrect_passcode'
+    response 'shut_off'
+  }
+
+  var 'isUnlocked', :boolean, true
+  var 'passcode_storage', :integer, -1
+  var 'amount_of_retries', :integer, 0
+
+  state 's_closed'
+  repeat {
+    # When the door is closed and unlocked, it may be opened.
+    o { receive 'open'; constraint 'isUnlocked'; send 'opened'; goto 's_opened' }
+    o { receive 'open'; constraint '!isUnlocked'; send 'invalid_command' }
+    # When the door is closed and unlocked, it may be locked.
+    # The lock and unlock commands are accompanied by a four digit passcode.
+    # The four digit passcode must be in the range 0000 to 9999. Other passcodes are considered invalid.
+    o {
+        receive 'lock', constraint: 'isUnlocked && passcode >= 0 && passcode <= 9999',
+          update: 'isUnlocked = false; passcode_storage = passcode';
+        send 'locked'
+    }
+    # When the lock command is used with an invalid passcode, the command must be refused and then door must
+    # return the invalid_passcode response.
+    o {
+        receive 'lock', constraint: 'isUnlocked && passcode < 0 && passcode > 9999';
+        send 'invalid_passcode'
+    }
+    # When the door is closed and locked, it may be unlocked.
+    # The lock and unlock commands are accompanied by a four digit passcode.
+    # When the lock command is used with a valid passcode, the door can only be unlocked with an unlock command
+    # containing that exact passcode. Other passcodes are considered incorrect.
+    o {
+        receive 'unlock', constraint: '!isUnlocked && passcode == passcode_storage',
+          update: 'isUnlocked = true; passcode_storage = passcode; amount_of_retries = 0';
+        send 'unlocked'
+    }
+    o {
+        receive 'unlock', constraint: 'isUnlocked && (passcode == passcode_storage || passcode != passcode_storage)';
+        send 'invalid_command'
+    }
+    # When the unlock command is used with an incorrect passcode, the command must be refused and then door
+    # must return the incorrect_passcode response.
+    o {
+        receive 'unlock', constraint: '!isUnlocked && passcode != passcode_storage && passcode >= 0 && passcode <= 9999',
+          update: 'amount_of_retries = amount_of_retries + 1';
+        send 'incorrect_passcode'
+    }
+    # When the unlock command is used three times with an incorrect passcode, the door must shut off and
+    # not respond to any commands until it is restarted physically. Note that SECLOC-06 still applies.
+    o {
+        receive 'unlock', constraint: '!isUnlocked && passcode != passcode_storage && passcode >= 0 && passcode <= 9999 && amount_of_retries >= 2',
+          update: 'amount_of_retries = amount_of_retries + 1';
+        send 'incorrect_passcode';
+        goto 's_shutoff'
+    }
+    # When the unlock command is used with an invalid passcode, the command must be refused and the door
+    # must return the invalid_passcode response.
+    o {
+        receive 'unlock', constraint: '!isUnlocked && passcode < 0 && passcode > 9999';
+        send 'invalid_passcode'
+    }
+    # All other commands must be refused.
+    o { receive 'close'; send 'invalid_command' }
+  }
+
+  state 's_opened'
+  repeat {
+    # When the door is opened, it may be closed.
+    o { receive 'close'; send 'closed'; goto 's_closed' }
+    # All other commands must be refused.
+    o { receive 'open'; send 'invalid_command' }
+    o {
+        receive 'lock', constraint: 'passcode == passcode_storage || passcode != passcode_storage';
+        send 'invalid_command'
+    }
+    o {
+        receive 'unlock', constraint: 'passcode == passcode_storage || passcode != passcode_storage';
+        send 'invalid_command'
+    }
+  }
+
+  state 's_shutoff'
+  send 'shut_off'
+}
