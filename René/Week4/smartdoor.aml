@@ -3,10 +3,10 @@ def config
     :bug_besto => false,
     :bug_logica => false,
     :bug_onTarget => false,
-    :bug_quicker => false, # TODO
+    :bug_quickerr => true, # TODO
     :bug_smartSoft => false,
     :bug_trustedTechnologies => false,
-    :bug_univerSolutions => true, # TODO
+    :bug_univerSolutions => false,
     :bug_xtraSafe => false
   }
 end
@@ -80,6 +80,26 @@ process('main') {
           update: 'isUnlocked = false; passcode_storage = passcode';
         send 'locked'
     }
+    if config[:bug_quickerr]
+      o {
+        receive 'lock',
+          constraint: '!isUnlocked
+                        && passcode >= min_passcode
+                        && passcode <= max_passcode',
+          update: 'isUnlocked = false; passcode_storage = passcode';
+        send 'locked'
+      }
+      o {
+        receive 'lock',
+          constraint: '!isUnlocked && (passcode < min_passcode || passcode > max_passcode)';
+        send 'invalid_passcode'
+      }
+    end
+    o {
+        receive 'lock',
+          constraint: '!isUnlocked && (passcode == passcode_storage || passcode != passcode_storage)';
+        send 'invalid_command'
+    }
     # When the lock command is used with an invalid passcode, the command must be refused and then door must
     # return the invalid_passcode response.
     o {
@@ -105,18 +125,17 @@ process('main') {
     else
       o {
           receive 'unlock',
-            constraint: '!isUnlocked &&
-                         passcode == passcode_storage &&
-                         passcode >= min_passcode &&
-                         passcode <= max_passcode',
+            constraint: '!isUnlocked
+                          && passcode == passcode_storage
+                          && passcode >= min_passcode
+                          && passcode <= max_passcode',
             update: 'isUnlocked = true; passcode_storage = passcode; amount_of_retries = 0';
           send 'unlocked'
       }
     end
     o {
         receive 'unlock',
-          constraint: 'isUnlocked &&
-                       (passcode == passcode_storage || passcode != passcode_storage)';
+          constraint: 'isUnlocked && (passcode == passcode_storage || passcode != passcode_storage)';
         send 'invalid_command'
     }
     # When the unlock command is used three times with an incorrect passcode, the door must shut off and
@@ -135,11 +154,11 @@ process('main') {
     # must return the incorrect_passcode response.
     o {
         receive 'unlock',
-          constraint: '!isUnlocked &&
-                       passcode != passcode_storage &&
-                       passcode >= min_passcode &&
-                       passcode <= max_passcode &&
-                       amount_of_retries < max_retries - 1',
+          constraint: '!isUnlocked
+                        && passcode != passcode_storage
+                        && passcode >= min_passcode
+                        && passcode <= max_passcode
+                        && amount_of_retries < max_retries - 1',
           update: 'amount_of_retries = amount_of_retries + 1';
         send 'incorrect_passcode'
     }
