@@ -3,7 +3,7 @@ def config
     :bug_besto => false,
     :bug_logica => false,
     :bug_onTarget => false,
-    :bug_quickerr => true, # TODO
+    :bug_quickerr => false,
     :bug_smartSoft => false,
     :bug_trustedTechnologies => false,
     :bug_univerSolutions => false,
@@ -14,7 +14,7 @@ end
 external 'door'
 process('main') {
   if config[:bug_trustedTechnologies]
-    timeout 0.6
+    timeout 1.0
   else
     timeout 0.5
   end
@@ -41,14 +41,17 @@ process('main') {
 
   var 'amount_of_retries', :integer, 0
 
-  ## TODO: Remove?
-  if config[:bug_univerSolutions]
-    var 'max_retries', :integer, 3
+  if config[:bug_smartSoft]
+    var 'max_retries', :integer, 10
   else
     var 'max_retries', :integer, 3
   end
 
-  var 'min_passcode', :integer, 0000
+  if config[:bug_trustedTechnologies]
+    var 'min_passcode', :integer, 1000
+  else
+    var 'min_passcode', :integer, 0000
+  end
 
   if config[:bug_onTarget]
     var 'max_passcode', :integer, 999999999
@@ -56,13 +59,7 @@ process('main') {
     var 'max_passcode', :integer, 9999
   end
 
-  if config[:bug_smartSoft]
-    var 'max_retries', :integer, 10
-  end
 
-  if config[:bug_trustedTechnologies]
-    var 'min_passcode', :integer, 1000
-  end
 
   state 's_closed'
   repeat {
