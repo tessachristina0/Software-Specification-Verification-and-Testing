@@ -10,16 +10,45 @@ import Test.QuickCheck
 import Donovan.Week4.LTS
 import Donovan.Week4.Exercise4
 
+-- out :: IOLTS -> [State] -> [Label]
+-- out _ [] = []
+-- out (states, labelI, labelU, transitions, startState) state = [label | (firsState, label, _) <- transitions,
+--                                                                         firsState == head state]
+
+out' :: IOLTS -> [State] -> [Label]
+out' _ [] = []
+out' (states, labelI, labelU, transitions, startState) (x:xs) = [label | (firsState, label, _) <- transitions,
+                                                                        firsState == x ]
+
+out'' :: IOLTS -> [State] -> [Label]
+out'' _ [] = [" "]
+out'' (states, lin, lout, ts, ss) (x:xs) = [label | (first, label, _) <- ts,
+                                                                        first == x ] ++ out'' (states, lin, lout, ts, ss) xs
+
+searchTrans :: State -> [LabeledTransition] -> [Label]
+searchTrans s [] = []
+searchTrans s ((s1,l,s2):ts) | s == s1  = if ts /= [] then l : searchTrans s ts else [l]
+                             | otherwise = searchTrans s ts
+
 out :: IOLTS -> [State] -> [Label]
 out _ [] = []
-out (states, labelI, labelU, transitions, startState) state = [label | (firsState, label, _) <- transitions,
-                                                                        firsState == last state]
+out (states, lin, lout, ts, ss) (x:xs) = searchTrans x ts ++ out (states, lin, lout, ts, ss) xs
+
+-- infix `ioco`
+-- ioco :: IOLTS -> IOLTS -> Bool
+-- ioco impl model =
+--     subList (out impl (impl `after` out impl (returnFirstState impl)))
+--             (out model (model `after` out model (returnFirstState model)))
 
 infix `ioco`
 ioco :: IOLTS -> IOLTS -> Bool
-ioco impl model = 
-    subList (out impl (impl `after` out impl (returnFirstState impl))) 
-            (out model (model `after` out model (returnFirstState model)))
+ioco impl model | length x > length y = False
+                | otherwise = subList x y
+                where
+                    x = out impl (impl `after` out impl (returnFirstState impl))
+                    y = out model (model `after` out model (returnFirstState model))
+
+
 
 returnFirstState :: IOLTS -> [State]
 returnFirstState (_, _, _, _, startState) = [startState]
