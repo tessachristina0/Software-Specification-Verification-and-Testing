@@ -4,16 +4,19 @@
 -- Make a list of factors that result in invalid IOLTS's. Write a function validateLTS :: IOLTS -> Bool that 
 -- returns true iff a given LTS is valid according to the definition given in the Tretmans paper.
 -- Deliverables: list of factors, implementation, short test report, indication of time spent.
--- Time spend: ?? minutes --
+-- Time spend: 4 hours --
+module Donovan.Week4.Exercise1 where
 import Data.List
 import Test.QuickCheck
 import Donovan.Week4.LTS
 
 -- Make a list of factors 
--- 1. q (the states) are a countable, non-empty set
--- 2. l (the labels) are a countable set
--- 3. lt contains all of the unique transitions 
--- 4. q0 is the initial state
+-- 1. States, labels and labeled transitions list do have duplicates
+-- 2. The start state isn't part of the states list
+-- 3. The union of input and output labels contains tau
+-- 4. Values of the input label are present in the output label (intersection)
+-- 5. There is a transition which has a state that isn't part of the states list
+-- 6. There is a label in a transation which is not present in the union of the input and output labels
 
 validateLTS :: IOLTS -> Bool
 validateLTS (states, labelsI, labelsU, labeledTransitions, startState) 
@@ -35,3 +38,23 @@ checkForDuplicates labelI labelU labeledTransitions
     | labelI == nub labelI = True
     | labelU == nub labelU = True
     | labeledTransitions == nub labeledTransitions = True
+
+
+exercise1 :: IO ()
+exercise1 = do
+  putStrLn "\bExercise 1\nTime spent +/- 4 hours\n"
+  putStrLn "tretmanK1: "
+  print (validateLTS tretmanK1)
+  putStrLn "\ntretmanK2: "
+  print (validateLTS tretmanK2)
+  putStrLn "\ntretmanK3: "
+  print (validateLTS tretmanK3)
+  putStrLn "\ntretmanI1: "
+  print (validateLTS tretmanI1)
+  putStrLn "\ntretmanI2: "
+  print (validateLTS tretmanI2)
+  putStrLn "\ntretmanI3: "
+  print (validateLTS tretmanI3)
+  putStrLn "\ntretmanI4: "
+  print (validateLTS tretmanI4)
+  putStrLn "\n"
