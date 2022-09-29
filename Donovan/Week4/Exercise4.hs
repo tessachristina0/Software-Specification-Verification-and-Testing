@@ -15,10 +15,12 @@ returnNextState transition startState trace
     | not $ null trace = returnNextState transition (getNextState transition startState trace) (tail trace)
 
 getNextState :: [LabeledTransition] -> [State] -> Trace -> [State]
-getNextState transition startState trace = [nextState | (firstState, label, nextState) <- transition, label == head trace && elem firstState startState]
+getNextState transition startState trace = [nextState | (firstState, label, nextState) <- transition, 
+                                                        label == head trace
+                                                        && elem firstState startState]
 
 after :: IOLTS -> Trace -> [State]
-after (_, _, _, transition, startState) = returnNextState transition [startState]
+after (states, labelI, labelU, transition, startState) = returnNextState transition [startState]
 
 
 exercise4 :: IO ()
