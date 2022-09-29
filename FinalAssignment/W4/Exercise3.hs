@@ -23,13 +23,17 @@ addQuiescenseSteps iolts@(states, input, output, lts, s) = (states, input, outpu
 findAllPossibleTransitions :: [LabeledTransition] -> TraceState -> TraceState
 findAllPossibleTransitions transitions = concatMap (\(state, trace) -> map (\(_, label, s2) -> (s2, trace ++ [label])) $ filter (\(s1, _, _) -> s1 == state) transitions)
 
-aaa :: [LabeledTransition] -> TraceState -> [Trace]
-aaa _ [] = []
-aaa transitions memory =
-    map snd memory ++ aaa transitions (findAllPossibleTransitions transitions memory)
-
-start :: IOLTS -> [Trace]
-start (_, _, _, transitions, s) = aaa transitions [(s, [])]
+straces' :: IOLTS -> TraceState -> [Trace]
+straces' _ [] = []
+straces' iolts@(_, _, _, transitions, _) memory =
+    map snd memory ++ straces' iolts (findAllPossibleTransitions transitions memory)
 
 straces :: IOLTS -> [Trace]
-straces iolts = nub $ start $ addQuiescenseSteps iolts
+straces iolts@(_, _, _, transitions, s) = nub $ straces' (addQuiescenseSteps iolts) [(s, [])]
+
+
+-- genTraces :: Gen [Trace]
+-- genTraces = do
+--     l <- vectorOf 100 ltsGen
+--     sublistOf $ take 100 (straces (generate $ ltsGen))
+
