@@ -11,9 +11,11 @@ import Donovan.Week4.LTS
 
 returnNextState :: [LabeledTransition] -> [State] -> Trace -> [State]
 returnNextState transition startState trace
-    | null (trace) = startState
-    | not (null (trace)) = returnNextState transition ([nextState | (firstState, label, nextState) <- transition, firstState `elem` startState && label == head trace]) (tail trace)
+    | null trace = startState
+    | not $ null trace = returnNextState transition (getNextState transition startState trace) (tail trace)
 
+getNextState :: [LabeledTransition] -> [State] -> Trace -> [State]
+getNextState transition startState trace = [nextState | (firstState, label, nextState) <- transition, label == head trace && elem firstState startState]
 
 after :: IOLTS -> Trace -> [State]
 after (_, _, _, transition, startState) = returnNextState transition [startState]
