@@ -9,34 +9,27 @@ import Test.QuickCheck
 
 import FinalAssignment.W4.LTS
 
--- straces :: IOLTS -> [Trace]
--- straces (_, _, _, labeledTrans, _) = map (\(_, x, _) -> x) (filter straces' labeledTrans)
+type TraceState = [(State, Trace)]
 
--- straces' :: [LabeledTransition] -> State -> Trace -> [Trace] -> [Trace]
--- straces' transitions curState curTrace allTraces = allTraces ++ [curTrace] ++ map (\(_, label, s2) -> [label] ++ (straces' transitions s2 curTrace allTraces)) (finAllPossibleTraces transitions curState)
+filterInputSteps :: IOLTS -> [LabeledTransition]
+filterInputSteps (states, input, output, lts, s) = filter (\(s1, label, _) -> label `elem` input) lts
+
+createQuiescenseSteps :: IOLTS -> [LabeledTransition]
+createQuiescenseSteps iolts@(states, input, output, lts, s) = nub (lts ++ map (\(s1, label, _) -> (s1, label, s1)) (filterInputSteps iolts))
+
+addQuiescenseSteps :: IOLTS -> IOLTS
+addQuiescenseSteps iolts@(states, input, output, lts, s) = (states, input, output, createQuiescenseSteps iolts, s)
 
 findAllPossibleTransitions :: [LabeledTransition] -> TraceState -> TraceState
 findAllPossibleTransitions transitions = concatMap (\(state, trace) -> map (\(_, label, s2) -> (s2, trace ++ [label])) $ filter (\(s1, _, _) -> s1 == state) transitions)
 
-type TraceState = [(State, Trace)]
-
-
-
-start :: IOLTS -> [Trace]
-start (_, _, _, transitions, s) = aaa transitions []
-
-
 aaa :: [LabeledTransition] -> TraceState -> [Trace]
 aaa _ [] = []
 aaa transitions memory =
-    map (\(_, trace) -> trace) memory ++ concatMap (\transition -> aaa transitions [transition]) (findAllPossibleTransitions transitions memory)
+    map snd memory ++ aaa transitions (findAllPossibleTransitions transitions memory)
 
+start :: IOLTS -> [Trace]
+start (_, _, _, transitions, s) = aaa transitions [(s, [])]
 
--- map (\(_, trace) -> trace) memory : concatMap (\(_, label, s2) -> aaa transitions memory s2 (curTrace ++ [label])) (finAllPossibleTransitions transitions curState)
--- sortBy (\(x1, _, x2) (y1, _, y2) -> compare (x1 /= x2) (y1 /= y2)  )
-
--- 1. start with start state
--- 2. find all possible labels
--- 3. Append all transition labels 
-
--- S-trace toevoegen aan input
+straces :: IOLTS -> [Trace]
+straces iolts = nub $ start $ addQuiescenseSteps iolts
