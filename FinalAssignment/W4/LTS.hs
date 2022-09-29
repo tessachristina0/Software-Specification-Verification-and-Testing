@@ -1,4 +1,4 @@
-module LTS where
+module FinalAssignment.W4.LTS where
 import Data.List
 
 -- Types
