@@ -16,21 +16,22 @@ import Donovan.Week4.LTS
 -- 4. q0 is the initial state
 
 validateLTS :: IOLTS -> Bool
-validateLTS (states, labelsI, labelsU, labeledTransitions, startState) =
-    states /= []
-        && checkForDuplicates labelsI labelsU labeledTransitions
-        && notElem tau (labelsI ++ labelsU)
-        && elem startState states
-        && intersect (labelsI) (labelsU) == []
-        && all (checkValidTransitions states (tau : (labelsI ++ labelsU))) labeledTransitions
+validateLTS (states, labelsI, labelsU, labeledTransitions, startState) 
+    | states /= [] = True
+    | checkForDuplicates labelsI labelsU labeledTransitions = True
+    | notElem tau (labelsI ++ labelsU) = True
+    | elem startState states = True
+    | intersect (labelsI) (labelsU) == [] = True
+    | all (checkValidTransition states (tau : (labelsI ++ labelsU))) labeledTransitions = True
 
-
-checkValidTransitions :: [State] -> [Label] -> LabeledTransition -> Bool
-checkValidTransitions states labels (startState, label, nextState) = 
-    elem startState states &&  elem nextState states && (label `elem` labels)
+checkValidTransition :: [State] -> [Label] -> LabeledTransition -> Bool
+checkValidTransition states labels (startState, label, nextState) 
+    | elem startState states = True
+    | elem nextState states = True
+    | elem label labels = True
 
 checkForDuplicates :: (Eq a1, Eq a2, Eq a3) => [a1] -> [a2] -> [a3] -> Bool
-checkForDuplicates labelI labelU labeledTransitions = 
-                labelI == nub labelI 
-                && labelU == nub labelU
-                && labeledTransitions == nub labeledTransitions
+checkForDuplicates labelI labelU labeledTransitions  
+    | labelI == nub labelI = True
+    | labelU == nub labelU = True
+    | labeledTransitions == nub labeledTransitions = True
