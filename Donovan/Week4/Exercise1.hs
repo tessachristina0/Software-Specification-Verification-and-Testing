@@ -15,21 +15,21 @@ import Donovan.Week4.LTS
 -- 3. lt contains all of the unique transitions 
 -- 4. q0 is the initial state
 
--- How do i check if all of the [(x, _, _)] from the tuples are present in the [q] this is what i don't know :')
-tuplesToList :: [(a, a, a)] -> [a]
-tuplesToList _ = []
-tuplesToList ((a, b, c):xs) = a : tuplesToList xs
-
 validateLTS :: IOLTS -> Bool
-validateLTS _ = False
-validateLTS ([], [l1], [l2], [lt], q0) = False
-validateLTS ([q], [l1], [l2], [lt], q0) = not (null [q])
-validateLTS ([q], [l1], [l2], [lt], q0) = not (null [l1]) && not (null [l2])
-validateLTS ([q], [l1], [l2], [(x, _, _)], s) = undefined
-validateLTS ([q], [l1], [l2], [lt], q0) = q0 == 0 || q0 == 1
+validateLTS (states, labelsI, labelsU, labeledTransitions, startState) =
+    states /= []
+        && checkForDuplicates labelsI
+        && checkForDuplicates labelsU
+        && checkForDuplicates labeledTransitions
+        && notElem tau (labelsI ++ labelsU)
+        && elem startState states
+        && intersect (labelsI) (labelsU) == []
+        && all (checkValidTransitions states (tau : (labelsI ++ labelsU))) labeledTransitions
 
--- validateLTS ([q], [l1], [l2], [lt], s) 
---             | [q] == [State] = True
---             | not (null [q]) = False
---             | not (null [l1]) && not (null [l2]) = False
---             | otherwise = True
+
+checkValidTransitions :: [State] -> [Label] -> LabeledTransition -> Bool
+checkValidTransitions states labels (startState, label, nextState) = 
+    elem startState states &&  elem nextState states && (label `elem` labels)
+
+checkForDuplicates :: Eq a => [a] -> Bool
+checkForDuplicates xs = xs == nub xs
