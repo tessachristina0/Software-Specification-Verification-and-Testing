@@ -15,23 +15,20 @@ import FinalAssignment.W4.LTS
 -- straces' :: [LabeledTransition] -> State -> Trace -> [Trace] -> [Trace]
 -- straces' transitions curState curTrace allTraces = allTraces ++ [curTrace] ++ map (\(_, label, s2) -> [label] ++ (straces' transitions s2 curTrace allTraces)) (finAllPossibleTraces transitions curState)
 
-finAllPossibleTraces :: [LabeledTransition] -> State -> [LabeledTransition]
-finAllPossibleTraces transitions forState = filter (\(s1, _, _) -> s1 == forState ) transitions
+finAllPossibleTransitions :: [LabeledTransition] -> State -> [LabeledTransition]
+finAllPossibleTransitions transitions forState = filter (\(s1, _, _) -> s1 == forState ) transitions
 
+start :: IOLTS -> [Trace]
+start (_, _, _, transitions, s) = aaa transitions s []
 
--- bbb transitions curState curTrace = (concatMap (\(_, label, s2) -> bbb transitions s2 (curTrace ++ [label])) (finAllPossibleTraces transitions curState))
+aaa :: [LabeledTransition] -> State -> Trace -> [Trace]
+aaa transitions curState curTrace =
+    curTrace : concatMap (\(_, label, s2) -> aaa transitions s2 (curTrace ++ [label])) (finAllPossibleTransitions transitions curState)
 
-bbb :: IOLTS -> [Trace]
-bbb (_, _, _, transitions, s) = aaa transitions (finAllPossibleTraces transitions s) s [""]
-
-
-aaa :: [LabeledTransition] -> [LabeledTransition] -> State -> Trace -> [Trace]
-aaa transitions possibleTransitions curState curTrace = 
-    curTrace : concatMap (\(_, label, s2) -> aaa transitions (finAllPossibleTraces transitions s2) s2 (curTrace ++ [label]) ) possibleTransitions
-
-
+-- sortBy (\(x1, _, x2) (y1, _, y2) -> compare (x1 /= x2) (y1 /= y2)  )
 
 -- 1. start with start state
 -- 2. find all possible labels
 -- 3. Append all transition labels 
 
+-- S-trace toevoegen aan input
