@@ -1,0 +1,229 @@
+%-------------------------------------------------------------------------------
+% LATEX TEMPLATE ARTIKEL
+%-------------------------------------------------------------------------------
+% Dit template is voor gebruik door studenten van de de bacheloropleiding 
+% Informatica van de Universiteit van Amsterdam.
+% Voor informatie over schrijfvaardigheden, zie 
+%                               https://practicumav.nl/schrijven/index.html
+%
+%-------------------------------------------------------------------------------
+%	PACKAGES EN DOCUMENT CONFIGURATIE
+%-------------------------------------------------------------------------------
+
+\documentclass{uva-inf-article}
+\usepackage[english]{babel}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+
+\lstdefinestyle{mystyle}{
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\usepackage[style=authoryear-comp]{biblatex}
+\addbibresource{references.bib}
+
+%-------------------------------------------------------------------------------
+%	GEGEVENS VOOR IN DE TITEL, HEADER EN FOOTER
+%-------------------------------------------------------------------------------
+
+% Geef je artikel een logische titel die de inhoud dekt.
+\title{Bug Hunting Expedition}
+
+% Vul de naam van de opdracht in zoals gegeven door de docent en het type 
+% opdracht, bijvoorbeeld 'technisch rapport' of 'essay'.
+\assignment{Model Based Testing with AMS}
+\assignmenttype{essay}
+
+% Vul de volledige namen van alle auteurs in en de corresponderende UvAnetID's.
+\authors{René Kok; Tim van Ekert; Donovan Schaafsma; Tessa van Lobbrecht}
+\uvanetids{13671146; 13635565; 13656007; 11848944}
+
+% Vul de naam van je tutor, begeleider (mentor), of docent / vakcoördinator in.
+% Vermeld in ieder geval de naam van diegene die het artikel nakijkt!
+\tutor{Theo Ruys | Axini}
+
+% Vul hier de naam van je tutorgroep, werkgroep, of practicumgroep in.
+\group{Group 5}
+
+% Vul de naam van de cursus in en de cursuscode, te vinden op o.a. DataNose.
+\course{Software Specification, Verification and Testing}
+\courseid{5364SSVT6Y}
+
+% Dit is de datum die op het document komt te staan. Standaard is dat vandaag.
+\date{\today}
+
+%-------------------------------------------------------------------------------
+%	VOORPAGINA 
+%-------------------------------------------------------------------------------
+
+\begin{document}
+\maketitle
+
+%-------------------------------------------------------------------------------
+%	FINDINGS
+%-------------------------------------------------------------------------------
+
+\section{Findings}
+\subsection{Besto}
+We found \textbf{1} bug for Besto.
+
+\subsubsection{The wrong state returned when closing an opened door}
+\textbf{In what state(s)/situation(s) does the bug occur?},\\
+The situation is that the door is opened and then the user wants to close the door.\\
+\textbf{What is the expected behavior?}\\
+The door should be "closed".\\
+\textbf{What behavior is observed instead?}\\
+But the response is "opened".\\
+\textbf{What is your hypothesisto  of how the bug works?}\\
+The door returns the wrong state.
+
+\subsection{Logica}
+We found \textbf{1} bug for Logica.
+
+\subsubsection{An invalid password should not unlock a door}
+\textbf{In what state(s)/situation(s) does the bug occur?}\\
+The situation is that the door is closed and locked, then the user wants to unlock the door with an invalid password.\\
+\textbf{What is the expected behavior?}\\
+The door should not open with an invalid password.\\
+\textbf{What behavior is observed instead?}\\
+The door does open with an invalid password.\\
+\textbf{What is your hypothesis of how the bug works?}\\
+The check if the password equals the set password is negated.
+
+\subsection{OnTarget}
+We found \textbf{1} bug for OnTarget.
+
+\subsubsection{A password up to 9 digits should be allowed}
+\textbf{In what state(s)/situation(s) does the bug occur?}\\
+The situation is fourhat the program shouldn't allow more than 4 digits, but OnTarget's Smartdoor accepts up to nine digits as. \\
+\textbf{What is the expected behavior?}\\
+The program should fail because the maximum is four digits (so 9999).\\
+\textbf{What behavior is observed instead?}\\
+A password with the integer 999999999 is inserted, which should throw an \emph{invalid password} message.\\
+\textbf{What is your hypothesis of how the bug works?}\\
+The bug is that it is possible to insert up to 9 digits as a password, while this shouldn't be possible.
+
+\subsection{Quickerr}
+We found \textbf{1} bug for Quickerr.
+
+\subsubsection{The door can be locked while it already is closed and locked}
+\textbf{In what state(s)/situation(s) does the bug occur?}\\
+The door is closed and locked.\\
+\textbf{What is the expected behavior?}\\
+The door can be unlocked and opened, but not be locked again.\\
+\textbf{What behavior is observed instead?}\\
+The system is locking the door again while it is closed and locked.\\
+\textbf{What is your hypothesis of how the bug works?}\\
+The bug is that a door can be locked over and over again while it already is locked.
+
+\subsection{SmartSoft}
+We found \textbf{1} bug for SmartSoft.
+
+\subsubsection{Maximum amount of consecutive incorrect passwords should not be more than 3}
+\textbf{In what state(s)/situation(s) does the bug occur?}\\
+The situation is that a user is trying to put in the wrong password multiple times.\\
+\textbf{What is the expected behavior?}\\
+The system has to shut off after three times.\\
+\textbf{What behavior is observed instead?}\\
+The system is not shutting off after inputting the wrong password 3 times.\\
+\textbf{What is your hypothesis of how the bug works?}\\
+The door is accepting more than 3 consecutive incorrect passwords.
+
+\newpage
+
+\subsection{TrustedTechnologies}
+We found \textbf{2} bugs for TrustedTechnologies.
+
+\subsubsection{Passwords between 0 and 1000 should be allowed}
+\textbf{In what state(s)/situation(s) does the bug occur?}\\
+The situation is that the given password is lower than 1000 and is not accepted by the door.\\
+\textbf{What is the expected behavior?}\\
+The door should accept a password lower than 1000 and greater than 0.\\
+\textbf{What behavior is observed instead?}\\
+The door does not accept a password lower than 1000.\\
+\textbf{What is your hypothesis of how the bug works?}\\
+The password is checked if it’s larger than 1000 instead of 0.
+
+\subsubsection{Door should response in 0.5 seconds}
+\textbf{In what state(s)/situation(s) does the bug occur?}\\
+The situation is that the returned response messages takes longer than 0.5 seconds.\\
+\textbf{What is the expected behavior?}\\
+The door should return response messages in 0.5 seconds..\\
+\textbf{What behavior is observed instead?}\\
+The door takes longer than 0.5 seconds to respond.\\
+\textbf{What is your hypothesis of how the bug works?}\\
+The door does return response messages in 0.5 seconds.
+
+
+\subsection{UniverSolutions}
+We found \textbf{1} bug for UniverSolutions.
+
+\subsubsection{Only the incorrect password should add up to the incorrect password counter}
+\textbf{In what state(s)/situation(s) does the bug occur?}\\
+The situation is that the door shuts off on an invalid password.\\
+\textbf{What is the expected behavior?}\\
+The door should only shut off on incorrect password when trying to unlock. 
+Not on invalid passwords when unlocking.\\
+\textbf{What behavior is observed instead?}\\
+The situation is that the door shuts off on an invalid password when trying to unlock.\\
+\textbf{What is your hypothesis of how the bug works?}\\
+The invalid passwords also counts towards the counter of the incorrect passwords. 
+So, it will shut off after three times of invalid or incorrect input.
+
+
+\subsection{XtraSafe}
+We found \textbf{2} bugs for XtraSafe.
+
+\subsubsection{An already opened door can be opened}
+\textbf{In what state(s)/situation(s) does the bug occur?}\\
+The situation is that the door accepts an 'open' command if the door is already open.\\
+\textbf{What is the expected behavior?}\\
+There should be an invalid command response since the door is already opened.\\
+\textbf{What behavior is observed instead?}\\
+The door is open and returns 'opened' on the 'open' command.\
+\textbf{What is your hypothesis of how the bug works?}\\
+There's no invalid command check on the command 'open' if the door is already open.
+
+\subsubsection{An already closed door can be closed}
+\textbf{In what state(s)/situation(s) does the bug occur?}\\
+The situation is that the door accepts an 'close' command if the door is already closed.\\
+\textbf{What is the expected behavior?}\\
+The door can’t be closed again so it has to give an invalid command response.\\
+\textbf{What behavior is observed instead?}\\
+The door is trying to close again while it is already closed.\
+\textbf{What is your hypothesis of how the bug works?}\\
+The door is being closed while it is already closed and this is possible in the bug.
+
+\newpage
+
+%-------------------------------------------------------------------------------
+%	APPENDIX 
+%-------------------------------------------------------------------------------
+
+\appendix 
+\section{Smartdoor's Model}
+\lstinputlisting[language=Ruby]{smartdoor.aml}
+
+%-------------------------------------------------------------------------------
+\end{document}
