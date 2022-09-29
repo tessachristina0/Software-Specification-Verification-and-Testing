@@ -18,12 +18,29 @@ getNextState :: [LabeledTransition] -> [State] -> Trace -> [State]
 getNextState transition startState trace = [nextState | (firstState, label, nextState) <- transition, 
                                                         label == head trace
                                                         && elem firstState startState]
-
+infix `after`
 after :: IOLTS -> Trace -> [State]
 after (states, labelI, labelU, transition, startState) = returnNextState transition [startState]
-
 
 exercise4 :: IO ()
 exercise4 = do
   putStrLn "\bExercise 1\nTime spent +/- - hours\n"
+  putStrLn "coffeeImpl1 coin and coffee: "
+  print (coffeeImpl1 `after` ["coin", "coffee"])
+  putStrLn "\ncoffeeImpl1 coin: "
+  print (coffeeImpl1 `after` ["coin"])
+  putStrLn "\ncoffeeImpl1 coffee: "
+  print (coffeeImpl1 `after` ["coffee"])
+  putStrLn "\ncoffeeImpl2 coin and coffee: "
+  print (coffeeImpl2 `after` ["coin", "coffee"])
+  putStrLn "\ncoffeeImpl2 coin: "
+  print (coffeeImpl2 `after` ["coin"])
+  putStrLn "\ncoffeeImpl2 coffee: "
+  print (coffeeImpl2 `after` ["coffee"])
+  putStrLn "\ncoffeeImpl3 coin and coffee: "
+  print (coffeeImpl3 `after` ["coin", "coffee"])
+  putStrLn "\ncoffeeImpl3 coin: "
+  print (coffeeImpl3 `after` ["coin"])
+  putStrLn "\ncoffeeImpl3 coffee: "
+  print (coffeeImpl3 `after` ["coffee"])
   putStrLn "\n"
