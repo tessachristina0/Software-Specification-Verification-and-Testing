@@ -128,13 +128,7 @@ createLTS transitions = (states, filter (/= tau) $ makeSet (map (\(_,label,_) ->
 makeSet :: Ord a => [a] -> [a]
 makeSet = sort . nub
 
--- Door implementations
-doorImpl1 :: State -> Label -> (State, Label)
-doorImpl1 0 "close" = (1, "closed")
-doorImpl1 1 "open" = (0, "opened")
-doorImpl1 1 "lock" = (2, "locked")
-doorImpl1 2 "unlock" = (1, "unlocked")
-doorImpl1 _ _ = error "Invalid command and/or state!"
+ 
 
 doorImpl2 :: State -> Label -> (State, Label)
 doorImpl2 0 "close" = (1, "opened")
