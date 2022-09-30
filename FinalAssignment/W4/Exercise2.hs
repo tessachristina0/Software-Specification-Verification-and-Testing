@@ -4,7 +4,7 @@ module FinalAssignment.W4.Exercise2 where
 -- Week 4 - Group 5
 -- Exercise 2: 
 -- Deliverables: Random IOLTS generator(s), QuickCheck tests for validateLts, indication of time spent
--- Time spend: ?? minutes --
+-- Time spend: 5 hours --
 import Data.List
 import System.Random
 import Test.QuickCheck
