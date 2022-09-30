@@ -1,3 +1,5 @@
+module FinalAssignment.W4.Exercise3 where
+
 -- SSVT Haskell Lab
 -- Week 4 - Group 5
 -- Time spend: 5 hours --
