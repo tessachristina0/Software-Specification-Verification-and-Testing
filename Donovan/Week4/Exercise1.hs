@@ -18,7 +18,8 @@ import Donovan.Week4.LTS
 -- 5. There is a transition which has a state that isn't part of the states list
 -- 6. There is a label in a transation which is not present in the union of the input and output labels
 
-validateLTS :: IOLTS -> Bool
+-- Function to validate an LTS by checking all its conditions.
+-- Then a boolean is returned which says if the LTS is valid or isn't valid.
 validateLTS (states, labelsI, labelsU, labeledTransitions, startState) 
     | states /= [] = True
     | checkForDuplicates labelsI labelsU labeledTransitions = True
@@ -27,12 +28,16 @@ validateLTS (states, labelsI, labelsU, labeledTransitions, startState)
     | intersect (labelsI) (labelsU) == [] = True
     | all (checkValidTransition states (tau : (labelsI ++ labelsU))) labeledTransitions = True
 
+-- Function to validate a transition within an LTS
+-- This function also returns a boolean which give the validation of the transitions
 checkValidTransition :: [State] -> [Label] -> LabeledTransition -> Bool
 checkValidTransition states labels (startState, label, nextState) 
     | elem startState states = True
     | elem nextState states = True
     | elem label labels = True
 
+-- Function to check if there are duplicates within the lists of labels and list of transitions
+-- This function also returns booleans to validate if there are no duplicates
 checkForDuplicates :: (Eq a1, Eq a2, Eq a3) => [a1] -> [a2] -> [a3] -> Bool
 checkForDuplicates labelI labelU labeledTransitions  
     | labelI == nub labelI = True
