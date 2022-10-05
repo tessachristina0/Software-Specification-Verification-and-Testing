@@ -7,26 +7,27 @@ module FinalAssignment.W5.Haskell.Exercise2 where
 
 import FinalAssignment.W5.Haskell.MultiplicationTable
 import FinalAssignment.W5.Haskell.Mutation
-import Test.QuickCheck
 import FinalAssignment.W5.Haskell.Exercise1
+import Test.QuickCheck
+
 
 type NrOfMutants = Int
 type Prop = [Integer] -> Integer -> Bool
 type Fn = (Integer -> [Integer])
 type Matrix = Gen [[Maybe Bool]]
 
-createMatrix :: NrOfMutants -> [Prop] -> Fn -> Matrix
-createMatrix nrOfMutants props fn = sequence $ [vectorOf nrOfMutants (mutate mutator prop fn 3) | prop <- props, mutator <- allMutators]
-
 allMutators :: [[Integer] -> Gen [Integer]]
 allMutators = [addElements, removeElements, addition, subtraction, multiplication, divide, modulo]
 
+createMatrix :: NrOfMutants -> [Prop] -> Fn -> Matrix
+createMatrix nrOfMutants props fn = sequence $ [vectorOf nrOfMutants (mutate mutator prop fn 3) | prop <- props, mutator <- allMutators]
+
 countSurvivors :: NrOfMutants -> [Prop] -> Fn -> Gen Int
-countSurvivors nrOfMutants props fn = testsM >>= \tests -> return $ length $ filter (== Just True) $ concat tests
+countSurvivors nrOfMutants props fn = testsMatrix >>= \tests -> return $ length $ filter (== Just True) $ concat tests
   where
-    testsM = createMatrix nrOfMutants props fn
+    testsMatrix = createMatrix nrOfMutants props fn
 
 exercise2 :: IO ()
 exercise2 = do
-  y <- generate $ countSurvivors 10000 multiplicationTableProps multiplicationTable
+  y <- generate $ countSurvivors 4000 multiplicationTableProps multiplicationTable
   print y
