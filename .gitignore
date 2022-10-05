@@ -225,3 +225,4 @@ out
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,visualstudiocode,haskell,node
 FinalAssignment/W5/Stryker/numbers.js/reports/mutation/mutation.html
+FinalAssignment/W5/Stryker/numbers.js/reports/mutation/mutation.json

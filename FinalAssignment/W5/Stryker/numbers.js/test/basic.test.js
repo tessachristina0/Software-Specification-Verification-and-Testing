@@ -378,4 +378,13 @@ suite('numbers', function () {
     done();
   });
 
+  // basic.numbersEqual
+  test('error should throw error message: "First and Second must be numbers."', () => {
+      try {
+        basic.numbersEqual("A", "B", Number.EPSILON);
+      } catch (err) {
+        assert.equal(err.message, "First and Second must be numbers.");
+      }
+  });
+
 });
