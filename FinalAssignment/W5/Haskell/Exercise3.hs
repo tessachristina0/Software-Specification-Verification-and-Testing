@@ -7,7 +7,7 @@ module FinalAssignment.W5.Haskell.Exercise1 where
 import FinalAssignment.W5.Haskell.Mutation
 import FinalAssignment.W5.Haskell.MultiplicationTable
 
-
+createMatrix :: 
 
 exercise3 :: IO ()
 exercise3 = do
