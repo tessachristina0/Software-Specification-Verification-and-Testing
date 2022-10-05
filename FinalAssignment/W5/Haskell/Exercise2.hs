@@ -13,11 +13,11 @@ allMutators :: [[Integer] -> Gen [Integer]]
 allMutators = [addElements, removeElements]
 
 countSurvivors :: Int -> [[Integer] -> Integer -> Bool] -> (Integer -> [Integer]) -> Gen Int
-countSurvivors nrOfMutants props fn = testsM >>= \tests -> return $ length $ filter (== Just False) $ concat tests
+countSurvivors nrOfMutants props fn = testsM >>= \tests -> return $ length $ filter (== Just True) $ concat tests
   where
     testsM = sequence [vectorOf nrOfMutants (mutate mutator prop fn 3) | prop <- props, mutator <- allMutators]
 
 exercise2 :: IO ()
 exercise2 = do
-  y <- generate $ countSurvivors 300 multiplicationTableProps multiplicationTable
+  y <- generate $ countSurvivors 300 [prop_tenElements] multiplicationTable
   print y
