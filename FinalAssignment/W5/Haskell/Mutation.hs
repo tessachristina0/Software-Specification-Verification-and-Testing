@@ -1,4 +1,4 @@
-module Mutation where
+module FinalAssignment.W5.Haskell.Mutation where
 import Test.QuickCheck
 import Data.List
 import Data.Maybe

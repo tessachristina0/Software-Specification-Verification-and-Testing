@@ -1,4 +1,4 @@
-module MultiplicationTable where
+module FinalAssignment.W5.Haskell.MultiplicationTable where
 import Test.QuickCheck
 import Data.List
 
