@@ -19,5 +19,5 @@ countSurvivors nrOfMutants props fn = testsM >>= \tests -> return $ length $ fil
 
 exercise2 :: IO ()
 exercise2 = do
-  y <- generate $ countSurvivors 300 [prop_tenElements] multiplicationTable
+  y <- generate $ countSurvivors 300 multiplicationTableProps multiplicationTable
   print y
