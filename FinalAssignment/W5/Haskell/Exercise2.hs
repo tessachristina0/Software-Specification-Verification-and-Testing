@@ -8,18 +8,18 @@ module FinalAssignment.W5.Haskell.Exercise2 where
 import FinalAssignment.W5.Haskell.MultiplicationTable
 import FinalAssignment.W5.Haskell.Mutation
 import Test.QuickCheck
+import FinalAssignment.W5.Haskell.Exercise1
 
 type NrOfMutants = Int
 type Prop = [Integer] -> Integer -> Bool
 type Fn = (Integer -> [Integer])
 type Matrix = Gen [[Maybe Bool]]
 
-
 createMatrix :: NrOfMutants -> [Prop] -> Fn -> Matrix
 createMatrix nrOfMutants props fn = sequence $ [vectorOf nrOfMutants (mutate mutator prop fn 3) | prop <- props, mutator <- allMutators]
 
 allMutators :: [[Integer] -> Gen [Integer]]
-allMutators = [addElements, removeElements]
+allMutators = [addElements, removeElements, addition, subtraction, multiplication, divide, modulo]
 
 countSurvivors :: NrOfMutants -> [Prop] -> Fn -> Gen Int
 countSurvivors nrOfMutants props fn = testsM >>= \tests -> return $ length $ filter (== Just True) $ concat tests
