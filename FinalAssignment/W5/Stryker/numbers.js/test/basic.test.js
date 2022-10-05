@@ -387,6 +387,11 @@ suite('numbers', function () {
       }
   });
 
+  test('Should throw error when input is NaN', () => {
+    assert.throws(() => basic.numbersEqual("A", 12, 2), Error);
+    assert.throws(() => basic.numbersEqual(10, "B", 2), Error);
+    assert.throws(() => basic.numbersEqual(10, 12, "C"), Error);
+  });
 
   test('Should not accept numbers equal to epsilon', () => {
     assert.equal(basic.numbersEqual(10, 12, 2), false);
