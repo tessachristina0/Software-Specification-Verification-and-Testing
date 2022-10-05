@@ -10,26 +10,14 @@ import FinalAssignment.W5.Haskell.Mutation
 import Test.QuickCheck
 import Data.Maybe
 
+allMutators :: [[Integer] -> Gen [Integer]]
 allMutators = [addElements, removeElements]
 
-countSurvivors :: Int -> [[Integer] -> Integer -> Bool] -> (Integer -> [Integer]) -> [Gen [Maybe Bool]]
-countSurvivors nrOfMutants props fn =
-  [ vectorOf nrOfMutants (mutate mutator prop fn 3) | prop <- props, mutator <- allMutators]
-
-
-aa = do
-  x <- bb
-  let y =  length $ filter (\x -> x == Just False) (concat x)
-  return y
-
--- count = tests >>= \x -> return $ length $ filter (== Just True) x
-bb :: Gen [[Maybe Bool]]
-bb = sequence $ countSurvivors 10 [prop_tenElements] multiplicationTable
-
--- Voert alle props uit in combinatie met mutator
--- Dan voeg je de lijsten samen door middel een lijst te maken van alle 1en
+countSurvivors :: Int -> [[Integer] -> Integer -> Bool] -> (Integer -> [Integer]) -> Gen Int
+countSurvivors nrOfMutants props fn = testsM >>= \tests -> return $ length $ filter (== Just False) $ concat tests
+  where testsM = sequence [ vectorOf nrOfMutants (mutate mutator prop fn 3) | prop <- props, mutator <- allMutators]
 
 exercise2 :: IO ()
 exercise2 = do
-  putStrLn "\bExercise 1\nTime spent +/- ~ hours\n"
-  putStrLn "\n"
+  y <- generate $ countSurvivors 300 multiplicationTableProps multiplicationTable
+  print y
