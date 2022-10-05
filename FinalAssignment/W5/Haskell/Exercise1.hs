@@ -38,38 +38,38 @@ List of other possible mutators (there can be more):
 addition :: [Integer] -> Gen [Integer]
 addition xs = do
     num <- arbitrary :: Gen Integer
-    if  map ((+) num) xs /= xs
-    then return (map ((+) num) xs)
+    if  fmap ((+) num) xs /= xs
+    then return (fmap ((+) num) xs)
     else addition xs
 
 -- Function to subtract a random generated number to each element in the list and return a new list with the new values.
 subtraction :: [Integer] -> Gen [Integer]
 subtraction xs = do
     num <- arbitrary :: Gen Integer
-    if map (subtract num) xs /= xs
-    then return (map (subtract num) xs)
+    if fmap (subtract num) xs /= xs
+    then return (fmap (subtract num) xs)
     else subtraction xs
 
 -- Function to multiply a random generated number to each element in the list and return a new list with the new values.
 multiplication :: [Integer] -> Gen [Integer]
 multiplication xs = do
     num <- arbitrary :: Gen Integer
-    if map ((*) num) xs /= xs
-    then return (map ((*) num) xs)
+    if fmap ((*) num) xs /= xs
+    then return (fmap ((*) num) xs)
     else multiplication xs
 
 -- Function to divide a random generated number to each element in the list and return a new list with the new values.
 divide :: [Integer] -> Gen [Integer]
 divide xs = do
     num <- arbitrary :: Gen Integer
-    if map (div num) xs /= xs
-    then return (map (div num) xs)
+    if fmap (div num) xs /= xs
+    then return (fmap (div num) xs)
     else divide xs
 
 -- Function to call modulo with a random generated number to each element in the list and return a new list with the new values.
 modulo :: [Integer] -> Gen [Integer]
 modulo xs = do
     num <- arbitrary :: Gen Integer
-    if map (mod num) xs /= xs
-    then return (map (mod num) xs)
+    if fmap (mod num) xs /= xs
+    then return (fmap (mod num) xs)
     else modulo xs
