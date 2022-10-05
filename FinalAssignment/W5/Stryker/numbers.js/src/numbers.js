@@ -1,4 +1,4 @@
-!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.numbers=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.numbers = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 module.exports = require('./lib/numbers.js');
 
 },{"./lib/numbers.js":2}],2:[function(require,module,exports){
@@ -1104,65 +1104,75 @@ var generate = exports;
 /**
  * Fast Fibonacci Implementation
  *
- * @param {Number} number to calculate
- * @return {Number} nth fibonacci number
+ * @param {number} The nth Fibonacci number to calculate
+ * @return {number|undefined} The nth Fibonacci number
  */
 generate.fibonacci = function (n) {
   // Adapted from
   // http://bosker.wordpress.com/2011/04/29/the-worst-algorithm-in-the-world/
 
-  var bitSystem = function (n) {
-    var bit, bits = [];
+  if (!isNaN(n)) {
+    var bitSystem = function (n) {
+      var bit, bits = [];
 
-    while (n > 0) {
-      bit = (n < 2) ? n : n % 2;
-      n = Math.floor(n / 2);
-      bits.push(bit);
+      while (n > 0) {
+        bit = (n < 2) ? n : n % 2;
+        n = Math.floor(n / 2);
+        bits.unshift(bit);
+      }
+
+      return bits;
+    };
+
+    var a = 1;
+    var b = 0;
+    var c = 1;
+    var system = bitSystem(n);
+    var temp;
+
+    for (var i = 0; i < system.length; i++) {
+      var bit = system[i];
+      if (bit) {
+        temp = [(a + c) * b, (b * b) + (c * c)];
+        a = temp[0];
+        b = temp[1];
+      } else {
+        temp = [(a * a) + (b * b), (a + c) * b];
+        a = temp[0];
+        b = temp[1];
+      }
+
+      c = a + b;
     }
 
-    return bits.reverse();
-  };
-
-  var a = 1;
-  var b = 0;
-  var c = 1;
-  var system = bitSystem(n);
-  var temp;
-
-  for (var i = 0; i < system.length; i++) {
-    var bit = system[i];
-    if (bit) {
-      temp = [(a + c) * b, (b * b) + (c * c)];
-      a = temp[0];
-      b = temp[1];
-    } else {
-      temp = [(a * a) + (b * b), (a + c) * b];
-      a = temp[0];
-      b = temp[1];
-    }
-
-    c = a + b;
+    return b;
   }
-
-  return b;
 };
 
 /**
- * Populate the given array with a Collatz Sequence.
+ * Build an array of numbers in a Collatz sequence
  *
- * @param {Number} first number.
- * @param {Array} arrary to be populated.
- * @return {Array} array populated with Collatz sequence
+ * @param {number} The number for which to build a Collatz sequence
+ * @return {Array|undefined} An array of numbers in a Collatz sequence
  */
-generate.collatz = function (n, result) {
-  result.push(n);
+generate.collatz = function (n) {
+  if (!isNaN(n)) {
+    var sequence = [];
 
-  if (n === 1) {
-    return;
-  } else if (n % 2 === 0) {
-    generate.collatz(n / 2, result);
-  } else {
-    generate.collatz(3 * n + 1, result);
+    sequence.push(n);
+
+    (function makeSequence(n) {
+      if (n !== 1) {
+        if (n % 2 === 0) {
+          sequence.push(n / 2);
+        } else {
+          sequence.push(3 * n + 1);
+        }
+        makeSequence(sequence[sequence.length - 1]);
+      }
+    })(n);
+
+    return sequence;
   }
 };
 
@@ -1321,13 +1331,14 @@ matrix.subtraction = function (arrA, arrB) {
  * @return {Array} updated matrix.
  */
 matrix.scalar = function (arr, val) {
-  for (var i = 0; i < arr.length; i++) {
-    for (var j = 0; j < arr[i].length; j++) {
-      arr[i][j] = val * arr[i][j];
+  var result = matrix.deepCopy(arr);
+  for (var i = 0; i < result.length; i++) {
+    for (var j = 0; j < result[i].length; j++) {
+      result[i][j] = val * arr[i][j];
     }
   }
 
-  return arr;
+  return result;
 };
 
 /**
@@ -2130,31 +2141,31 @@ matrix.vectorNorm = function (v, p) {
 
   switch (p) {
 
-  case Infinity:
-    for (i = 0; i < n; i++) {
-      term = Math.abs(v[i]);
-      if (term > ans) {
-        ans = term;
+    case Infinity:
+      for (i = 0; i < n; i++) {
+        term = Math.abs(v[i]);
+        if (term > ans) {
+          ans = term;
+        }
       }
-    }
-    break;
+      break;
 
-  case -Infinity:
-    ans = Infinity;
-    for (i = 0; i < n; i++) {
-      term = Math.abs(v[i]);
-      if (term < ans) {
-        ans = term;
+    case -Infinity:
+      ans = Infinity;
+      for (i = 0; i < n; i++) {
+        term = Math.abs(v[i]);
+        if (term < ans) {
+          ans = term;
+        }
       }
-    }
-    break;
+      break;
 
-  default:
-    for (i = 0; i < n; i++) {
-      ans += Math.pow(Math.abs(v[i]), p);
-    }
-    ans = Math.pow(ans, 1 / p);
-    break;
+    default:
+      for (i = 0; i < n; i++) {
+        ans += Math.pow(Math.abs(v[i]), p);
+      }
+      ans = Math.pow(ans, 1 / p);
+      break;
   }
 
   return ans;
@@ -2190,93 +2201,93 @@ matrix.matrixNorm = function (M, p) {
   switch (p) {
 
     // the largest value when absolute-ing and summing each row
-  case Infinity:
-    for (i = 0; i < m; i++) {
-      term = 0;
+    case Infinity:
+      for (i = 0; i < m; i++) {
+        term = 0;
 
-      for (j = 0; j < n; j++) {
-        term += Math.abs(M[i][j]);
+        for (j = 0; j < n; j++) {
+          term += Math.abs(M[i][j]);
+        }
+
+        if (term > ans) {
+          ans = term;
+        }
       }
+      break;
 
-      if (term > ans) {
-        ans = term;
+      // the smallest value when absolute-ing and summing each row
+    case -Infinity:
+      ans = Infinity;
+      for (i = 0; i < m; i++) {
+        term = 0;
+
+        for (j = 0; j < n; j++) {
+          term += Math.abs(M[i][j]);
+        }
+
+        if (term < ans) {
+          ans = term;
+        }
       }
-    }
-    break;
+      break;
 
-    // the smallest value when absolute-ing and summing each row
-  case -Infinity:
-    ans = Infinity;
-    for (i = 0; i < m; i++) {
-      term = 0;
+      // the largest value when absolute-ing and summing each column
+    case 1:
+      for (i = 0; i < n; i++) {
+        term = 0;
 
-      for (j = 0; j < n; j++) {
-        term += Math.abs(M[i][j]);
+        for (j = 0; j < m; j++) {
+          term += Math.abs(M[j][i]);
+        }
+
+        if (term > ans) {
+          ans = term;
+        }
       }
+      break;
 
-      if (term < ans) {
-        ans = term;
+      // the smallest value when absolute-ing and summing each column
+    case -1:
+      ans = Infinity;
+      for (i = 0; i < n; i++) {
+        term = 0;
+
+        for (j = 0; j < m; j++) {
+          term += Math.abs(M[j][i]);
+        }
+
+        if (term < ans) {
+          ans = term;
+        }
       }
-    }
-    break;
+      break;
 
-    // the largest value when absolute-ing and summing each column
-  case 1:
-    for (i = 0; i < n; i++) {
-      term = 0;
-
-      for (j = 0; j < m; j++) {
-        term += Math.abs(M[j][i]);
+      // the Frobenius norm
+    case null:
+      for (i = 0; i < m; i++) {
+        for (j = 0; j < n; j++) {
+          ans += Math.pow(M[i][j], 2);
+        }
       }
+      ans = Math.pow(ans, 0.5);
+      break;
 
-      if (term > ans) {
-        ans = term;
+      // largest singular value
+    case 2:
+      throw new Error("Singular values are not yet supported in numbers.js.");
+
+      // smallest singular value
+    case -2:
+      throw new Error("Singular values are not yet supported in numbers.js.");
+
+      // entry-wise norm; analogous to that of the entry-wise vector norm.
+    default:
+      for (i = 0; i < m; i++) {
+        for (j = 0; j < n; j++) {
+          ans += Math.pow(Math.abs(M[i][j]), p);
+        }
       }
-    }
-    break;
-
-    // the smallest value when absolute-ing and summing each column
-  case -1:
-    ans = Infinity;
-    for (i = 0; i < n; i++) {
-      term = 0;
-
-      for (j = 0; j < m; j++) {
-        term += Math.abs(M[j][i]);
-      }
-
-      if (term < ans) {
-        ans = term;
-      }
-    }
-    break;
-
-    // the Frobenius norm
-  case null:
-    for (i = 0; i < m; i++) {
-      for (j = 0; j < n; j++) {
-        ans += Math.pow(M[i][j], 2);
-      }
-    }
-    ans = Math.pow(ans, 0.5);
-    break;
-
-    // largest singular value
-  case 2:
-    throw new Error("Singular values are not yet supported in numbers.js.");
-
-    // smallest singular value
-  case -2:
-    throw new Error("Singular values are not yet supported in numbers.js.");
-
-    // entry-wise norm; analogous to that of the entry-wise vector norm.
-  default:
-    for (i = 0; i < m; i++) {
-      for (j = 0; j < n; j++) {
-        ans += Math.pow(Math.abs(M[i][j]), p);
-      }
-    }
-    ans = Math.pow(ans, 1 / p);
+      ans = Math.pow(ans, 1 / p);
 
   }
 
@@ -2458,6 +2469,63 @@ matrix.isStrictlyColumnDD = function (M) {
   return true;
 };
 
+/**
+ * Applies a function to every element of a vector or matrix (i.e. map).
+ * The function must take only one parameter.
+ *
+ * @param {Array} matrix
+ * @param {Function} function to apply to each element
+ * @return {Array} matrix operated on
+ */
+matrix.map = function (M, f) {
+  // M is n-by-m (n rows, m columns)
+  var n = M.length,
+    m = M[0].length,
+    i, j;
+
+  var res = matrix.deepCopy(M);
+
+  for (i = 0; i < n; i++) {
+    for (j = 0; j < m; j++) {
+      res[i][j] = f(M[i][j]);
+    }
+  }
+  return res;
+};
+
+/**
+ * Applies a function to every element of a vector or matrix (i.e. map).
+ * Identical to matrix.map, except that the function passed can take an
+ * arbitrary number of parameters (minimum of 1). Any extra arguments
+ * passed will be * passed to the apply-er function.
+ *
+ * @param {Array} matrix
+ * @param {Function} function to apply to each element
+ * @return {Array} matrix operated on
+ */
+matrix.mapMulti = function (M, f) {
+  // convert arguments object to an array, ignoring M and f
+  // extraArgs is of the form [x, arg0, arg1, ...]
+  var extraArgs = new Array(Object.keys(arguments).length - 1);
+  for (var k = 1; k < extraArgs.length; k++) {
+    extraArgs[k] = arguments[k + 1];
+  }
+
+  var n = M.length,
+    m = M[0].length,
+    i, j;
+
+  var res = matrix.deepCopy(M);
+
+  for (i = 0; i < n; i++) {
+    for (j = 0; j < m; j++) {
+      extraArgs[0] = M[i][j];
+      res[i][j] = f.apply(null, extraArgs);
+    }
+  }
+  return res;
+};
+
 },{}],9:[function(require,module,exports){
 /**
  * prime.js
@@ -2528,7 +2596,9 @@ prime.factorization = function (num) {
     x = 2;
     if (num % x) {
       x = 3;
-      while ((num % x) && ((x += 2) < root)) {}
+      while ((num % x) && ((x += 2) < root)) {
+        continue;
+      }
     }
 
     x = (root < x) ? num : x;
@@ -2594,11 +2664,14 @@ prime.millerRabin = function (n, k) {
 prime.sieve = function (n) {
   if (n < 2) return [];
   var result = [2];
-  for (var i = 3; i <= n; i++) {
+  var i, j;
+
+  for (i = 3; i <= n; i++) {
     var notMultiple = false;
 
-    for (var j in result) {
-      notMultiple = notMultiple || (0 === i % result[j]);
+    for (j in result) {
+      if (result.hasOwnProperty(j))
+        notMultiple = notMultiple || (0 === i % result[j]);
     }
 
     if (!notMultiple) {

@@ -387,4 +387,10 @@ suite('numbers', function () {
       }
   });
 
+
+  test('Should not accept numbers equal to epsilon', () => {
+    assert.equal(basic.numbersEqual(10, 12, 2), false);
+    assert.equal(basic.numbersEqual(12, 10, 2), false);
+  });
+
 });
