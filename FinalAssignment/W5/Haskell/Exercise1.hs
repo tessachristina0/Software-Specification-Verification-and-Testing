@@ -7,10 +7,69 @@
 module FinalAssignment.W5.Haskell.Exercise1 where
 import FinalAssignment.W5.Haskell.Mutation
 import FinalAssignment.W5.Haskell.MultiplicationTable
+import Test.QuickCheck
+import Data.List
 
+{- 
+List of mutators and rationale:
+The mutation functions which are applied in Mutation.hs are: 
+  - addElements 
+  - removeElements
 
+Not covered per mutator:
+  addElements:
+    - Random additions in the list before the existing array. Now there is always one new integer in front of the existing array.
+    - List given in order. The list isn't ordered now, it is completely random.
+  removeElements:
+    - Not covered: Random deletion, it always removes from right to left in a list
+    - Not covered: The first item is never removed from the list
 
-exercise1 :: IO ()
-exercise1 = do
-  putStrLn "\bExercise 1\nTime spent +/- ~ hours\n"
-  putStrLn "\n"
+Both mutators are weak since they are not covering a lot of constraints.
+
+List of other possible mutators (there can be more):
+  - Arithmetic: Add/Substract/Multiply/Divide/Modulo
+  - Array Declaration​: Empty a list ([1,2,3,4] -> [])
+  - Boolean Literal: Change the value of the boolean
+  - Equality Operator: Change the equality operator in a function
+  - Logical Operator: Change the logical operator in a function to a different logical operator
+-}
+
+-- Function to add a random generated number to each element in the list and return a new list with the new values.
+addition :: [Integer] -> Gen [Integer]
+addition xs = do
+    num <- arbitrary :: Gen Integer
+    if  map ((+) num) xs /= xs
+    then return (map ((+) num) xs)
+    else addition xs
+
+-- Function to subtract a random generated number to each element in the list and return a new list with the new values.
+subtraction :: [Integer] -> Gen [Integer]
+subtraction xs = do
+    num <- arbitrary :: Gen Integer
+    if map (subtract num) xs /= xs
+    then return (map (subtract num) xs)
+    else subtraction xs
+
+-- Function to multiply a random generated number to each element in the list and return a new list with the new values.
+multiplication :: [Integer] -> Gen [Integer]
+multiplication xs = do
+    num <- arbitrary :: Gen Integer
+    if map ((*) num) xs /= xs
+    then return (map ((*) num) xs)
+    else multiplication xs
+
+-- Function to divide a random generated number to each element in the list and return a new list with the new values.
+divide :: [Integer] -> Gen [Integer]
+divide xs = do
+    num <- arbitrary :: Gen Integer
+    if map (div num) xs /= xs
+    then return (map (div num) xs)
+    else divide xs
+
+-- Function to call modulo with a random generated number to each element in the list and return a new list with the new values.
+modulo :: [Integer] -> Gen [Integer]
+modulo xs = do
+    num <- arbitrary :: Gen Integer
+    if map (mod num) xs /= xs
+    then return (map (mod num) xs)
+    else modulo xs
