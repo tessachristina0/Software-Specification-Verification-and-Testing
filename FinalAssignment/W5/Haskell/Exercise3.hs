@@ -3,7 +3,6 @@
 -- Exercise 3: Implement a function that calculates the minimal property subsets, given a 'function under test' and a set of properties
 -- Deliverables: implementation, documentation of approach, indication of time spent.
 -- Time spend: ~ hours --
-{-# LANGUAGE ParallelListComp #-}
 module FinalAssignment.W5.Haskell.Exercise3 where
 import FinalAssignment.W5.Haskell.Mutation
 import FinalAssignment.W5.Haskell.MultiplicationTable
@@ -111,10 +110,13 @@ ff = testsMatrix >>= \tests -> return tests
 namedSubsets :: [(Int, Prop)]
 namedSubsets = zip [1..] multiplicationTableProps
 
+namedSubsetss :: [(Int, String)]
+namedSubsetss = zip [1..] multiplicationTablePropss
+
 -- Creates all subsets
 multiplicationTablePropss = ["prop_tenElements", "prop_firstElementIsInput", "prop_sumIsTriangleNumberTimesInput", "prop_linear", "prop_moduloIsZero"]
 
-subsets :: [(Int, Prop)] -> [[(Int, Prop)]]
+subsets :: [a] -> [[a]]
 subsets props = [ subset | subset <- subsequences props]
 
 removeNull :: [[a]] -> [[a]]
@@ -129,12 +131,28 @@ fullset props = countSurvivors 4000 props multiplicationTable
 -- subsetsMatrix :: [[Prop]] -> [([(Int, Prop)], Gen Int)]
 -- subsetsMatrix subsets = [(subset, countSurvivors 4000 subset multiplicationTable) | subset <- subsets ]
 
-aa :: [([Int], Gen Int)]
-aa = [([i | (i, _) <- v], countSurvivors 4000 [a | (_, a) <- v] multiplicationTable) | v <- subsets namedSubsets]
 
-bb = [countSurvivors 4000 [a | (_, a) <- v] multiplicationTable | v <- removeNull $ subsets namedSubsets]
+aa :: Gen [([Int], Int)]
+aa = sequence [sequence ([i | (i, _) <- v], countSurvivors 4000 [a | (_, a) <- v] multiplicationTable) | v <- removeNull $ subsets namedSubsets]
 
-cc = [[i | (i, _) <- v] | v <- removeNull $ subsets namedSubsets]
+vv = fmap (filter (\(props, score) -> score == 0 && length props < 5)) aa
+
+
+-- bb = [[], countSurvivors 4000 [a | (i, a) <- v] multiplicationTable | v <- removeNull $ subsets namedSubsets]
+
+-- cc = [[i | (i, _) <- v] | v <- removeNull $ subsets namedSubsetss, compareProps multiplicationTableProps [j | (_, j) <- v] multiplicationTable >>= x]
+
+compareProps allProps props fn = do
+  a1 <- mutate' addElements allProps fn 1
+  a2 <- mutate' addElements props fn 1
+  return (a2 == a1)
+
+iii props allProps fn = a1 >>= \x -> a2 >>= \y -> return (x == y)
+  where   a1 = mutate' addElements allProps fn 1
+          a2 = mutate' addElements props fn 1
+
+-- dd = yy >>= \x -> return (elemIndex (foldl1' min x) x)
+--   where yy = sequence bb
 
 -- -- -- Compares each the survivors of each subset to the survivors of the full set of properties
 -- comparesets :: Gen Int -> [([Prop], Gen Int)] -> [[Prop]]
