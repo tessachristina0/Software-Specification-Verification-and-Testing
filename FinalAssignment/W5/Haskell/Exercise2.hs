@@ -5,27 +5,31 @@
 -- Time spend: ~ 3 hours --
 module FinalAssignment.W5.Haskell.Exercise2 where
 
+import FinalAssignment.W5.Haskell.Exercise1
 import FinalAssignment.W5.Haskell.MultiplicationTable
 import FinalAssignment.W5.Haskell.Mutation
-import FinalAssignment.W5.Haskell.Exercise1
 import Test.QuickCheck
 
-
 type NrOfMutants = Int
+
 type Prop = [Integer] -> Integer -> Bool
+
 type Fn = (Integer -> [Integer])
+
 type Matrix = Gen [[Maybe Bool]]
 
-allMutators :: [[Integer] -> Gen [Integer]]
+type Mutator = ([Integer] -> Gen [Integer])
+
+allMutators :: [Mutator]
 allMutators = [addElements, removeElements, addition, subtraction, multiplication, divide, modulo]
 
-createMatrix :: NrOfMutants -> [Prop] -> Fn -> Matrix
-createMatrix nrOfMutants props fn = sequence $ [vectorOf nrOfMutants (mutate mutator prop fn 3) | prop <- props, mutator <- allMutators]
+createMatrix :: Int -> [[Integer] -> Integer -> Bool] -> (Integer -> [Integer]) -> Gen [[[Bool]]]
+createMatrix nrOfMutants props fn = sequence $ [vectorOf nrOfMutants (mutate' mutator props fn 3) | mutator <- allMutators]
 
 countSurvivors :: NrOfMutants -> [Prop] -> Fn -> Gen Int
-countSurvivors nrOfMutants props fn = testsMatrix >>= \tests -> return $ length $ filter (== Just True) $ concat tests
+countSurvivors nrOfMutants props fn = testsMatrix >>= \tests -> return $ length $ filter (\y -> all (== True) y && not (null y)) tests
   where
-    testsMatrix = createMatrix nrOfMutants props fn
+    testsMatrix = fmap concat (createMatrix nrOfMutants props fn)
 
 exercise2 :: IO ()
 exercise2 = do
