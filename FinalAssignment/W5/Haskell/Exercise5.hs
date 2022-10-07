@@ -7,6 +7,9 @@ module FinalAssignment.W5.Haskell.Exercise5 where
 import FinalAssignment.W5.Haskell.Mutation
 import FinalAssignment.W5.Haskell.MultiplicationTable
 import FinalAssignment.W5.Haskell.Exercise3
+import FinalAssignment.W5.Haskell.Exercise2
+import Test.QuickCheck
+import Data.List
 
 -- ALGORITHM --
 -- Below, I will describe the algorithm used for this exercise. However, given that
