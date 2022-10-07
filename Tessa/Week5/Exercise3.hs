@@ -3,10 +3,10 @@
 -- Exercise 3: Implement a function that calculates the minimal property subsets, given a 'function under test' and a set of properties
 -- Deliverables: implementation, documentation of approach, indication of time spent.
 -- Time spend: ~ hours --
-module FinalAssignment.W5.Haskell.Exercise3 where
-import FinalAssignment.W5.Haskell.Mutation
-import FinalAssignment.W5.Haskell.MultiplicationTable
-import FinalAssignment.W5.Haskell.Exercise1
+module Exercise3 where
+import Mutation
+import MultiplicationTable
+import Exercise1
 import Test.QuickCheck
 import Data.List (subsequences)
 
@@ -58,9 +58,16 @@ takeProps :: [(String, Prop)] -> [Prop]
 takeProps sets = [ prop | (_, prop) <- sets]
 
 -- Take set of props, and check if Prop holds on input with Mutant-output - one list for each mutant (so lenght sublist is nr of Props in propset)
-testMutants :: [(String, Prop)] -> Mutants -> Integer -> [[Bool]]
-testMutants set mutants input = [[ prop mutant input | prop <- takeProps set ] | mutant <- mutants ]
+testMutants :: [(String, Prop)] -> Gen [[Integer]] -> Integer -> [[Bool]]
+-- testMutants :: [(String, Prop)] -> [[Integer]] -> Integer -> [[Bool]]
+-- testMutants set mutants input = [[ prop mutant input | prop <- takeProps set ] | mutant <- mutants ]
+
+testMutants set mutants input = do
+  mutant <- mutants
+  let bools = [[ prop mut input | prop <- takeProps set ] | mut <- mutant ]
+  return bools
 -- TODO: This &()@*)@&^ mutants is of type Gen [Integer] and needs to be just [Integer] for the above function to work. Lord knows how
+
 
 -- Mutant has survived if all properties in a propset hold for the mutant 
 survivor :: [Bool] -> Bool
@@ -79,7 +86,9 @@ compareShits fullset subset = fullset == subset
 minimalSet :: [(String, Prop)] -> [[(String, Prop)]] -> [[String]]
 minimalSet fullset subsets = g [ subset | subset <- subsets, compareShits (f fullset) (f subset)]
   where
-    f x = survived $ testMutants x (allMutants allMutators multiplicationTable) 3
+    -- f x = survived $ testMutants x (allMutants allMutators multiplicationTable) 3
+    f x = do
+      survived $ testMutants x (allMutants allMutators multiplicationTable) 3
     g y = [[ name | (name, _) <- minimalset ] | minimalset <- y ]
 
 

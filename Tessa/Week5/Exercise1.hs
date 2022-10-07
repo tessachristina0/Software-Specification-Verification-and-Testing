@@ -5,8 +5,8 @@
 -- Deliverables: List of mutators and rationale, implementation, indication of time spent.
 -- Time spend: ~ hours --
 module Exercise1 where
-import FinalAssignment.W5.Haskell.Mutation
-import FinalAssignment.W5.Haskell.MultiplicationTable
+import Mutation
+import MultiplicationTable
 import Test.QuickCheck
 import Data.List
 

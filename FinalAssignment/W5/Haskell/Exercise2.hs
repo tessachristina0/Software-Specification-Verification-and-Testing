@@ -3,11 +3,11 @@
 -- Exercise 2: Write a function countSurvivors that counts the number of survivors.
 -- Deliverables: implementation, documentation of approach, effect of using different mutators/properties, indication of time spent.
 -- Time spend: ~ 3 hours --
-module FinalAssignment.W5.Haskell.Exercise2 where
+module Exercise2 where
 
-import FinalAssignment.W5.Haskell.Exercise1
-import FinalAssignment.W5.Haskell.MultiplicationTable
-import FinalAssignment.W5.Haskell.Mutation
+import Exercise1
+import MultiplicationTable
+import Mutation
 import Test.QuickCheck
 
 type NrOfMutants = Int
