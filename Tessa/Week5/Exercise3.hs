@@ -60,14 +60,13 @@ takeProps sets = [ prop | (_, prop) <- sets]
 -- Take set of props, and check if Prop holds on input with Mutant-output - one list for each mutant (so lenght sublist is nr of Props in propset)
 testMutants :: [(String, Prop)] -> Gen [[Integer]] -> Integer -> [[Bool]]
 -- testMutants :: [(String, Prop)] -> [[Integer]] -> Integer -> [[Bool]]
--- testMutants set mutants input = [[ prop mutant input | prop <- takeProps set ] | mutant <- mutants ]
-
-testMutants set mutants input = do
-  mutant <- mutants
-  let bools = [[ prop mut input | prop <- takeProps set ] | mut <- mutant ]
-  return bools
+testMutants set mutants input = [[ prop mutant input | prop <- takeProps set ] | mutant <- mutants ]
 -- TODO: This &()@*)@&^ mutants is of type Gen [Integer] and needs to be just [Integer] for the above function to work. Lord knows how
-
+-- Attempt (not working):
+-- testMutants set mutants input = do
+--   mutant <- mutants
+--   let bools = [[ prop mut input | prop <- takeProps set ] | mut <- mutant ]
+--   return bools
 
 -- Mutant has survived if all properties in a propset hold for the mutant 
 survivor :: [Bool] -> Bool

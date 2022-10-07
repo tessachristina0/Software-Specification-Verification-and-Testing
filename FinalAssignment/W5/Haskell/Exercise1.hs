@@ -4,7 +4,7 @@
 -- and about their weakness/strength. Come up with a list of other mutators and implement (a subset of) them.
 -- Deliverables: List of mutators and rationale, implementation, indication of time spent.
 -- Time spend: ~ hours --
-module Exercise1 where
+module FinalAssignment.W5.Haskell.Exercise1 where
 import FinalAssignment.W5.Haskell.Mutation
 import FinalAssignment.W5.Haskell.MultiplicationTable
 import Test.QuickCheck

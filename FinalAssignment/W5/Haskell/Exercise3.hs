@@ -4,8 +4,8 @@
 -- Deliverables: implementation, documentation of approach, indication of time spent.
 -- Time spend: ~ hours --
 module FinalAssignment.W5.Haskell.Exercise3 where
-import Exercise2
-import Mutation
+import FinalAssignment.W5.Haskell.Exercise2
+import FinalAssignment.W5.Haskell.Mutation
 import FinalAssignment.W5.Haskell.MultiplicationTable
 import Test.QuickCheck
 import Data.List
@@ -102,7 +102,6 @@ testMutants set mutants input = [[ prop mutant input | prop <- takeProps set ] |
 --   let bools = [[ prop mut input | prop <- takeProps set ] | mut <- mutant ]
 --   return bools
 
-
 -- Mutant has survived if all properties in a propset hold for the mutant 
 survivor :: [Bool] -> Bool
 survivor = all (== True)
@@ -113,17 +112,15 @@ survived resultsPerSet = [ survivor result | result <- resultsPerSet ]
 -- Note: Result is list of True/False *per* mutant (not per prop)
 
 -- Compares two total survivors lists and returns True if they are equivalent
-compareShits :: [Bool] -> [Bool] -> Bool
-compareShits fullset subset = fullset == subset
+compareBools :: [Bool] -> [Bool] -> Bool
+compareBools fullset subset = fullset == subset
 
 -- Returns the subset of which the results are equal to the fullset
 minimalSet :: [(String, Prop)] -> [[(String, Prop)]] -> [[String]]
-minimalSet fullset subsets = g [ subset | subset <- subsets, compareShits (f fullset) (f subset)]
+minimalSet fullset subsets = g [ subset | subset <- subsets, compareBools (f fullset) (f subset)]
   where
     f x = survived $ testMutants x (allMutants allMutators multiplicationTable) 3
     g y = [[ name | (name, _) <- minimalset ] | minimalset <- y ]
-
-
 
 
 -- METHOD TWO:
