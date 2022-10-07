@@ -22,7 +22,7 @@ type Mutator = ([Integer] -> Gen [Integer])
 allMutators :: [Mutator]
 allMutators = [addElements, removeElements, addition, subtraction, multiplication, divide, modulo]
 
-createMatrix :: Int -> [[Integer] -> Integer -> Bool] -> (Integer -> [Integer]) -> Gen [[[Bool]]]
+createMatrix :: NrOfMutants -> [[Integer] -> Integer -> Bool] -> (Integer -> [Integer]) -> Gen [[[Bool]]]
 createMatrix nrOfMutants props fn = sequence $ [vectorOf nrOfMutants (mutate' mutator props fn 3) | mutator <- allMutators]
 
 countSurvivors :: NrOfMutants -> [Prop] -> Fn -> Gen Int

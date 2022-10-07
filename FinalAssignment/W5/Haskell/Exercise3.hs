@@ -2,7 +2,7 @@
 -- Week 5 - Group 5
 -- Exercise 3: Implement a function that calculates the minimal property subsets, given a 'function under test' and a set of properties
 -- Deliverables: implementation, documentation of approach, indication of time spent.
--- Time spend: ~ hours --
+-- Time spend: ~ 10 hours --
 module FinalAssignment.W5.Haskell.Exercise3 where
 import FinalAssignment.W5.Haskell.Exercise2
 import FinalAssignment.W5.Haskell.Mutation
@@ -10,6 +10,10 @@ import FinalAssignment.W5.Haskell.MultiplicationTable
 import Test.QuickCheck
 import Data.List
 
+removeNull :: [[a]] -> [[a]]
+removeNull [] = []
+removeNull (x:xs) | null x     = xs
+                  | otherwise   = x : removeNull xs
 
 -- METHOD ONE:
 {- This initial method compares the exact result of each mutant tested with a subset of properties, to the result of the same
@@ -17,7 +21,7 @@ mutant tested with the full set of properties. However, there was one deficit in
 in the testMutants function. In that function there is a Gen [[Integer]] type for a list of mutant, of which merely an [[Integer]]
 can be used as input within the function. After many attempts it could not be fixed. Thus, we present another second method after 
 this one.
--}
+
 -- ALGORITHM
 -- Create a mutant for a mutator
 -- Create all n mutants (of fut MultiplicationTable) and one mutator
@@ -52,7 +56,6 @@ this one.
 -- End: Print all minimal sets
 
 -- All types used, for overview
-type NrOfMutants = Int
 type Fut = (Integer -> [Integer])
 type Matrix = Gen [[Maybe Bool]]
 type Mutants = Gen [[Integer]]
@@ -82,11 +85,6 @@ fiveProps = zip nameProps multiplicationTableProps
 -- Subsets: All subsets to be tested
 subSets :: [[(String, Prop)]]
 subSets = removeNull $ subsequences fiveProps
-
-removeNull :: [[a]] -> [[a]]
-removeNull [] = []
-removeNull (x:xs) | null x     = xs
-                  | otherwise   = x : removeNull xs
 
 -- Helper: Take one subset, only the props of it to use in testers!
 takeProps :: [(String, Prop)] -> [Prop]
@@ -121,7 +119,7 @@ minimalSet fullset subsets = g [ subset | subset <- subsets, compareBools (f ful
   where
     f x = survived $ testMutants x (allMutants allMutators multiplicationTable) 3
     g y = [[ name | (name, _) <- minimalset ] | minimalset <- y ]
-
+-}
 
 -- METHOD TWO:
 {- Given the lack of output of the previous function, below follows the second implementation. This implementation
@@ -129,136 +127,34 @@ compares the number of survivors of the same amount of mutants tested for a subs
 Thus, this is not an exact comparison of the same mutants, but does provide a test result, however not as exact as method 1.
 -}
 
--- GENERATES:
--- [
---   [Mutator 1 x 
---     [Mutation x Prop1, Mutation x Prop2, Mutation x Prop3]
---   ],
---   [Mutator 2 x 
---     [Mutation x Prop1, Mutation x Prop2, Mutation x Prop3] 
---   ]
--- ]
-
--- 1. [Prop_1, Prop_2, Prop_3, Prop_4]
--- 2. [Prop_1, Prop_2], [Prop_1, Prop_3], [Prop_2, Prop_3]
--- 3. mutate' 
-
-ee :: Gen [[Bool]]
-ee = sequence $ [mutate' mut multiplicationTableProps multiplicationTable 1 | mut <- allMutators ]
-
--- gg = filter (\y -> all (== True) y && not (null y)) (fmap (\props -> mutate' addElements props multiplicationTable 1) ff)
-
--- ([Int], [Bool])
-
-numberedProps :: [(Int, [Integer] -> Integer -> Bool)]
-numberedProps = zip [1..] multiplicationTableProps
-
-minimalProps = do
-   [([i | (i, _) <- c], ee) | c <- subsequences numberedProps]
-
-ff = testsMatrix >>= \tests -> return tests
-  where
-    testsMatrix = sequence $ [([1], mutate' addElements props multiplicationTable 1) | props <- subsequences multiplicationTableProps]
-
---           p1    p2    p3    p4    p5
--- mutator  [False,False,False,False,True],
--- mutator  [False,True ,False,True ,True],
--- mutator  [True ,False,False,True ,True],
--- mutator  [True ,False,False,True ,True],
--- mutator  [True ,False,False,False,True],
--- mutator  [True ,False,False,False,True],
--- mutator  [True ,False,False,False,True]
-
--- [(1, 2, 3), [False, False, False]]
-
---           p1    p2    p3    p4
--- mutator  [False,False,False,False],
--- mutator  [False,True ,False,True ],
--- mutator  [True ,False,False,True ],
--- mutator  [True ,False,False,True ],
--- mutator  [True ,False,False,False],
--- mutator  [True ,False,False,False],
--- mutator  [True ,False,False,False]
-
---           p1    p3    p4
--- mutator  [False,False,False],
--- mutator  [False,False,True ],
--- mutator  [True ,False,True ],
--- mutator  [True ,False,True ],
--- mutator  [True ,False,False],
--- mutator  [True ,False,False],
--- mutator  [True ,False,False]
-
---           p1    p4
--- mutator  [False],
--- mutator  [False],
--- mutator  [],
--- mutator  [],
--- mutator  [False],
--- mutator  [False],
--- mutator  [False]
-
--- createMatrix' :: Int -> [[Integer] -> Integer -> Bool] -> (Integer -> [Integer]) -> [Gen [[Bool]]]
--- createMatrix' nrOfMutants props fn = map (\mut -> vectorOf nrOfMutants (mutate' mut props fn 1)) allMutators
-
--- remove mutator array
--- [
---   [Mutation x Prop1, Mutation x Prop2, Mutation x Prop3],
---   [Mutation x Prop1, Mutation x Prop2, Mutation x Prop3],
--- ]
-
--- test3 = generate $ sequence $ createMatrix' 2 [prop_tenElements, prop_firstElementIsInput, prop_sumIsTriangleNumberTimesInput] multiplicationTable
-
-namedSubsets :: [(Int, Prop)]
-namedSubsets = zip [1..] multiplicationTableProps
-
-namedSubsetss :: [(Int, String)]
-namedSubsetss = zip [1..] multiplicationTablePropss
-
--- Creates all subsets
-multiplicationTablePropss = ["prop_tenElements", "prop_firstElementIsInput", "prop_sumIsTriangleNumberTimesInput", "prop_linear", "prop_moduloIsZero"]
-
 subsets :: [a] -> [[a]]
 subsets props = [ subset | subset <- subsequences props]
 
 fullset :: [Prop] -> Gen Int
 fullset props = countSurvivors 4000 props multiplicationTable
 
--- Creates a matrix of each subset with its nr of survivors
--- subsetsMatrix :: [[Prop]] -> [([(Int, Prop)], Gen Int)]
--- subsetsMatrix subsets = [(subset, countSurvivors 4000 subset multiplicationTable) | subset <- subsets ]
+createSuperSet :: [a] -> [[a]]
+createSuperSet a = [ subset | subset <- subsequences a]
 
+numberedSubsets :: [Prop] -> [(Int, Prop)]
+numberedSubsets = zip [1..]
 
-aa :: Gen [([Int], Int)]
-aa = sequence [sequence ([i | (i, _) <- v], countSurvivors 4000 [a | (_, a) <- v] multiplicationTable) | v <- removeNull $ subsets namedSubsets]
+createMinimalSubsetsMatrix ::NrOfMutants -> [[Integer] -> Integer -> Bool] -> (Integer -> [Integer]) -> Gen [([Int], Int)]
+createMinimalSubsetsMatrix nrOfMutants props fn = sequence [sequence ([nr | (nr, _) <- set], countSurvivors nrOfMutants [prop | (_, prop) <- set] fn) | set <- superSet]
+  where superSet = removeNull $ createSuperSet $ numberedSubsets props
 
-vv = fmap (filter (\(props, score) -> score == 0 && length props < 5)) aa
-
-
--- bb = [[], countSurvivors 4000 [a | (i, a) <- v] multiplicationTable | v <- removeNull $ subsets namedSubsets]
-
--- cc = [[i | (i, _) <- v] | v <- removeNull $ subsets namedSubsetss, compareProps multiplicationTableProps [j | (_, j) <- v] multiplicationTable >>= x]
-
-compareProps allProps props fn = do
-  a1 <- mutate' addElements allProps fn 1
-  a2 <- mutate' addElements props fn 1
-  return (a2 == a1)
-
-iii props allProps fn = a1 >>= \x -> a2 >>= \y -> return (x == y)
-  where   a1 = mutate' addElements allProps fn 1
-          a2 = mutate' addElements props fn 1
-
--- dd = yy >>= \x -> return (elemIndex (foldl1' min x) x)
---   where yy = sequence bb
-
--- -- -- Compares each the survivors of each subset to the survivors of the full set of properties
--- comparesets :: Gen Int -> [([Prop], Gen Int)] -> [[Prop]]
--- comparesets allprops [] = []
--- comparesets allprops ((prop, subset):xs) | allprops == subset  = prop : comparesets allprops xs
---                                          | otherwise           = comparesets allprops xs
-
+-- Returns a list of Integers, where a interger is the index of a property in the list of input properties.
+-- For example:
+--  List of input properties:
+--    [prop_tenElements, prop_firstElementIsInput, prop_sumIsTriangleNumberTimesInput, prop_linear, prop_moduloIsZero]
+--  Then "1" stands for "prop_tenElements" and "3" for "prop_sumIsTriangleNumberTimesInput"
+minimalSubsets :: (Integer -> [Integer]) -> [[Integer] -> Integer -> Bool] -> Gen [[Int]]
+minimalSubsets fn props = fmap (map fst . filter (\(p, score) -> score == 0 && length p < length props)) matrix
+  where matrix = createMinimalSubsetsMatrix 4000 props fn
 
 exercise3 :: IO ()
 exercise3 = do
-  putStrLn "\bExercise 1\nTime spent +/- ~ hours\n"
-  putStrLn "\n"
+  putStrLn "\bExercise 3\nTime spent +/- 10 hours\n"
+  putStrLn "The minimal property subsets of multiplicationTable:"
+  res <- generate $ minimalSubsets multiplicationTable multiplicationTableProps
+  print res
