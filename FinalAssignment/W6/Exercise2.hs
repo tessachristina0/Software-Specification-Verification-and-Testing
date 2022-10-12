@@ -9,13 +9,12 @@ import Data.List
 
 
 setIntersection :: Ord a => Set a -> Set a -> Set a
-setIntersection a b = undefined
+setIntersection (Set []) set2 = Set []
+setIntersection set1 (Set []) = Set []
+setIntersection (Set s1) (Set s2) = Set (s1 `intersect` s2)
 
 setUnion :: Ord a => Set a -> Set a -> Set a
-setUnion a b = Set (setUnion' a b)
-
-setUnion' :: Set a -> Set a -> [a]
-setUnion' a b = [a ++ b]
+setUnion = unionSet
 
 setDifference :: Ord a => Set a -> Set a -> Set a
 setDifference = undefined
