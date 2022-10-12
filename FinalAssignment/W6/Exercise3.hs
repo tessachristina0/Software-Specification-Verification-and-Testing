@@ -15,7 +15,7 @@ type Rel a = [(a,a)]
 
 -- Function to give the symmetric closure of a relation. The tuple is inversed and printed as well in the array, this is done for each value.
 symClos :: Ord a => Rel a -> Rel a
-symClos relations = concatMap (\(x,y) -> [(x, y), (y, x)]) relations
+symClos relations = sort (relations `union` [ (x,y) | (y,x) <- relations])
 
 exercise3 :: IO ()
 exercise3 = do
