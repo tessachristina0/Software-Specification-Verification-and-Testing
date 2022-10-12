@@ -28,4 +28,5 @@ trClos relations = if relations == closures then sort relations else trClos clos
 exercise5 :: IO ()
 exercise5 = do
     putStrLn "\bExercise 1\nTime spent +/- 3 hours\n"
-    putStrLn "symClos example: "
+    putStrLn "trClos example: "
+    print $ trClos [(1,2),(2,3),(3,4)]
