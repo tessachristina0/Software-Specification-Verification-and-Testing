@@ -17,4 +17,6 @@ setUnion :: Ord a => Set a -> Set a -> Set a
 setUnion = unionSet
 
 setDifference :: Ord a => Set a -> Set a -> Set a
-setDifference = undefined
+setDifference (Set []) set2 = Set []
+setDifference set1 (Set []) = Set []
+setDifference (Set s1) (Set s2) = list2set $ (s1 \\ s2) ++ (s2 \\ s1)
