@@ -34,7 +34,8 @@ exercise1 :: IO ()
 exercise1 = do
     putStrLn "\bExercise 1\nTime spent +/- 1 hour\n"
     putStrLn "Random Set: "
-    randomSet 20 0 100
+    randomSet <- randomSet 20 0 100
+    print randomSet
     putStrLn "Random Set using QuickCheck: "
-    randomSetQuickCheck 20 0 100
-    putStrLn ""
+    randomSetQuickCheck <- randomSetQuickCheck 20 0 100
+    print randomSetQuickCheck

@@ -63,15 +63,20 @@ exercise2 :: IO ()
 exercise2 = do
     putStrLn "\bExercise 2\nTime spent +/- 1 hour\n"
     putStrLn "setIntersection test without quickCheck"
-    prop_1
+    firstProp <- prop_1
+    print firstProp
     putStrLn "setIntersection test with quickCheck"
-    prop_1'
+    firstPropQC <- prop_1'
+    print firstPropQC
     putStrLn "setUnion test without quickCheck"
-    prop_2
+    secondProp <- prop_2
+    print secondProp
     putStrLn "setUnion test with quickCheck"
-    prop_2'
+    secondPropQC <- prop_2'
+    print secondPropQC
     putStrLn "setDifference test without quickCheck"
-    prop_3
+    thirdProp <- prop_2
+    print thirdProp
     putStrLn "setDifference test with quickCheck"
-    prop_3'
-    putStrLn ""
+    thirdPropQC <- prop_3'
+    print thirdPropQC
