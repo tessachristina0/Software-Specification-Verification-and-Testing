@@ -9,10 +9,8 @@
 module FinalAssignment.W6.Exercise6 where
 
 import Data.List
-import Data.Map (member)
-import Data.Tuple
 import FinalAssignment.W6.Exercise3 (symClos)
-import FinalAssignment.W6.Exercise5 (trClos, (@@))
+import FinalAssignment.W6.Exercise5 (trClos)
 import Test.QuickCheck
 
 type Rel a = [(a, a)]
@@ -27,7 +25,7 @@ instance Arbitrary Int' where
 isTransitive :: Eq a => Rel a -> Bool
 isTransitive rel = and [ (a1, b2) `elem` rel | (a1, a2) <- rel, 
                                                (b1, b2) <- rel, 
-                                               a2 == b1]
+                                               a2 == b1 ]
 
 -- All relations should be transitive
 prop_relationsAreTransitive :: Rel Int' -> Bool
