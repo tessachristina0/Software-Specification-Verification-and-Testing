@@ -7,7 +7,7 @@ module FinalAssignment.W6.Exercise1 where
 import FinalAssignment.W6.SetOrd
 import Data.List
 import System.Random
-import Test.QuickCheck
+import Test.QuickCheck ( choose, generate )
 import Control.Monad
 
 -- Function to create a random list
