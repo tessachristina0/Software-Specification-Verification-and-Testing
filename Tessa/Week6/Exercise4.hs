@@ -39,7 +39,6 @@ isSerial :: Eq a => [a] -> Rel a -> Bool
 isSerial ds rs = and [ d `elem` rList rs | d <- ds ] && and [r `elem` ds | r <- rList rs]
 
 
-
 -- B) Test your implementation with two QuickCheck properties:
 
 -- Generator to create the domain with maximum length

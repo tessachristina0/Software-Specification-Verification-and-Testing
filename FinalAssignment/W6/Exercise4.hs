@@ -2,7 +2,7 @@
 -- Week 6 - Group 5
 -- Exercise 4: Function for checking whether a relation is serial
 -- Deliverables: Haskell program, QuickCheck properties, short test report (including the proof), indication of time spent.
--- Time spend: ? minutes -
+-- Time spend: 3 hours -
 
 module FinalAssignment.W6.Exercise4 where
 import FinalAssignment.W6.SetOrd
@@ -24,24 +24,25 @@ That is, a relation R ⊆ 𝑆×𝑆 is serial if and only if *every element* of
 -}
 
 -- A) Write a function for checking whether a relation is serial:
+-- Type of the relation
 type Rel a = [(a,a)]
 
--- ALGORITHM -- TODO: finish in ENG
--- 1) Check recursief of x in [(a,b)] zit (dus x == a of x == b). 
--- 2) Check erna of ...
--- lijst van x1, x2, x3 etc.
--- lijst van relaties (a,b)
--- om te weten of relatie (a,b) valid is, check je of ELK element van lijst x1, x2 etc. 
--- tevens in de lijst van relaties (a,b) zit. 
+-- ALGORITHM --
+-- Take domain ds and relation rs
+-- 1) Flatten relation rs from list of tuples to simply list with elements in tuples.
+-- 2) Check whether all d from ds exists in any r = (a,b) from rs = [(a,b)], where d == a.
+-- 3) Check whether all x from flattened rs are an element of ds. 
 
+-- Make flattened list of all elements in tuples of a relation
+rList :: Rel a -> [a]
+-- rList rs = [  x | (x,_) <- rs ] ++ [ y | (_,y) <- rs ]
+rList rs = concat [[a,b] | (a, b) <- rs]
 
 isSerial :: Eq a => [a] -> Rel a -> Bool
 isSerial ds rs = and [ d `elem` rList rs | d <- ds ] && and [r `elem` ds | r <- rList rs]
 
 
-
 -- B) Test your implementation with two QuickCheck properties:
-
 -- Generator to create the domain with maximum length
 genDomain :: Gen [Integer]
 genDomain = (arbitrary :: Gen [Integer]) `suchThat` (\x -> length x <= 8 && x /= [])
@@ -68,16 +69,11 @@ genRelInv = do
     rela <- vectorOf 10 (genTuple xs)
     return (ds, rela)
 
-
 -- Property 1: Every element in tuples of the relation should make up *whole* domain of elements.
 -- Note: not reverse checking, but checking result to original domain.
--- Q: Does every element of R (rs, the list of R) need to be in domain???
+-- Q: Does every element of R (rs, the list of R) need to be in domain? -> Yes.
 
--- Make list of all elements in tuples of relations
-rList :: Rel a -> [a]
-rList rs = [  x | (x,_) <- rs ] ++ [ y | (_,y) <- rs ]
-
--- For checking if both lists contain the same elements, thus are equal lists. 
+-- Function for checking whether both lists contain the same elements, thus are equal lists. 
 -- Inspired by: https://www.reddit.com/r/haskell/comments/q0yj7h/how_can_i_check_if_two_lists_in_haskell_have_the/
 subset :: Eq a => [a] -> [a] -> Bool
 subset a b = all (`elem` b) a
@@ -86,23 +82,20 @@ prop_domain :: Eq a => [a] -> Rel a -> Bool
 prop_domain ds rs = isSerial ds rs && (subset ds (rList rs) && subset (rList rs) ds)
 
 -- Property 2: Minimal length of relation is length of the domain.
--- Q: Are there potentially duplicates, and if so: Do they need to be removed to check lengths?
+-- Q: Are there potentially duplicates, and if so: Do they need to be removed to check lengths? -> This may be useful, since 
+-- equivalent relations would add nothing relevant to the list of relations. However, it is not needed in this property-checking,
+-- thus it is not implemented below.
 prop_minLength :: Eq a => [a] -> Rel a -> Bool
 prop_minLength ds rs = isSerial ds rs && (length (rList rs) >= length ds)
-
 
 -- QuickCheck: Serial relations
 serialQuickCheck :: IO ()
 serialQuickCheck = do
     quickCheck $ forAll genRel (uncurry prop_domain)
     quickCheck $ forAll genRel (uncurry prop_minLength)
--- Notes: Uncurry filters the input for prop_domain before call of the function. The input for prop_ is given by the generator genRel, 
+-- Note: Uncurry filters the input for prop_domain before call of the function. The input for prop_ is given by the generator genRel, 
 -- and passed on by forAll. forAll takes the created generator as its input and repeats it a number of times for many cases of 
 -- testing with QuickCheck. 
-
-
--- quickcheck genRel' uncurry isSerial
---            (a,b)            isSerial a 
 
 
 -- C) Consider the relation R = {(x, y) | x = y(mod n)}, where (mod n) is the modulo function in modular arithmetic and n > 0. 
@@ -110,7 +103,6 @@ serialQuickCheck = do
 {- 
 Modulo divides one number by another as many times as possible and gives the rest-number. Thus, in (x, y), y will always be divided by
 some n and what is left (or: in case n > y, the whole y will be left such that x == y) is x. 
-
 
 Suppose we have some n, say n = 7, and would have some relations. Then the relations would for example be: {(1, 8), (2,9), (9, 18), (8, ...), ...}.
 This is as you can see already not valid, given that for (1,8) there should be a relation (8, _) - but this is impossible given that 8 > 7 
